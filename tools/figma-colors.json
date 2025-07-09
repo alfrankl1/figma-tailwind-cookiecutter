@@ -1,146 +1,146 @@
 {
    "semantic-colors":{
-      "bg-neutral-default-hover":{
+      "neutral-default-hover":{
          "light":"#1d293d",
          "dark":"#62748e"
       },
-      "bg-base-tertiary":{
+      "background-tertiary":{
          "light":"#d1d5dc",
          "dark":"#4a5565"
       },
-      "bg-base-secondary-hover":{
+      "background-secondary-hover":{
          "light":"#e5e7eb",
          "dark":"#101828"
       },
-      "bg-base-tertiary-hover":{
+      "background-tertiary-hover":{
          "light":"#99a1af",
          "dark":"#364153"
       },
-      "bg-base-default":{
+      "background-default":{
          "light":"#ffffff",
          "dark":"#101828"
       },
-      "bg-neutral-secondary":{
+      "neutral-secondary":{
          "light":"#cad5e2",
          "dark":"#314158"
       },
-      "bg-base-secondary":{
+      "background-secondary":{
          "light":"#f3f4f6",
          "dark":"#1e2939"
       },
-      "bg-neutral-tertiary-hover":{
+      "neutral-tertiary-hover":{
          "light":"#e2e8f0",
          "dark":"#020618"
       },
-      "bg-neutral-tertiary":{
+      "neutral-tertiary":{
          "light":"#f8fafc",
          "dark":"#0f172b"
       },
-      "bg-neutral-default":{
+      "neutral-default":{
          "light":"#314158",
          "dark":"#90a1b9"
       },
-      "bg-base-default-hover":{
+      "background-default-hover":{
          "light":"#f3f4f6",
          "dark":"#1e2939"
       },
-      "bg-neutral-secondary-hover":{
+      "neutral-secondary-hover":{
          "light":"#90a1b9",
          "dark":"#1d293d"
       },
-      "bg-brand-default":{
+      "brand-default":{
          "light":"#4e36f5",
          "dark":"#7578ff"
       },
-      "bg-brand-default-hover":{
+      "brand-default-hover":{
          "light":"#432ad8",
          "dark":"#635bff"
       },
-      "bg-brand-secondary":{
+      "brand-secondary":{
          "light":"#c2cbff",
          "dark":"#432ad8"
       },
-      "bg-brand-secondary-hover":{
+      "brand-secondary-hover":{
          "light":"#9ca7ff",
          "dark":"#3725ae"
       },
-      "bg-brand-tertiary":{
+      "brand-tertiary":{
          "light":"#ecf0ff",
          "dark":"#3725ae"
       },
-      "bg-brand-tertiary-hover":{
+      "brand-tertiary-hover":{
          "light":"#dde3ff",
          "dark":"#302689"
       },
-      "bg-positive-default":{
+      "positive-default":{
          "light":"#00c951",
          "dark":"#008236"
       },
-      "bg-positive-default-hover":{
+      "positive-default-hover":{
          "light":"#00a63e",
          "dark":"#016630"
       },
-      "bg-positive-secondary":{
+      "positive-secondary":{
          "light":"#b9f8cf",
          "dark":"#016630"
       },
-      "bg-positive-secondary-hover":{
+      "positive-secondary-hover":{
          "light":"#7bf1a8",
          "dark":"#0d542b"
       },
-      "bg-positive-tertiary":{
+      "positive-tertiary":{
          "light":"#f0fdf4",
          "dark":"#0d542b"
       },
-      "bg-positive-tertiary-hover":{
+      "positive-tertiary-hover":{
          "light":"#dcfce7",
          "dark":"#052e16"
       },
-      "bg-warning-default":{
+      "warning-default":{
          "light":"#fd9a00",
          "dark":"#ffba00"
       },
-      "bg-warning-default-hover":{
+      "warning-default-hover":{
          "light":"#e17100",
          "dark":"#fd9a00"
       },
-      "bg-warning-secondary":{
+      "warning-secondary":{
          "light":"#fee685",
          "dark":"#973c00"
       },
-      "bg-warning-secondary-hover":{
+      "warning-secondary-hover":{
          "light":"#ffd230",
          "dark":"#7b3306"
       },
-      "bg-warning-tertiary":{
+      "warning-tertiary":{
          "light":"#fffbeb",
          "dark":"#7b3306"
       },
-      "bg-warning-tertiary-hover":{
+      "warning-tertiary-hover":{
          "light":"#fef3c6",
          "dark":"#461901"
       },
-      "bg-danger-default":{
+      "danger-default":{
          "light":"#fb2c36",
          "dark":"#e7000b"
       },
-      "bg-danger-default-hover":{
+      "danger-default-hover":{
          "light":"#e7000b",
          "dark":"#c10007"
       },
-      "bg-danger-secondary":{
+      "danger-secondary":{
          "light":"#ffc9c9",
          "dark":"#9f0712"
       },
-      "bg-danger-secondary-hover":{
+      "danger-secondary-hover":{
          "light":"#ffa2a2",
          "dark":"#82181a"
       },
-      "bg-danger-tertiary":{
+      "danger-tertiary":{
          "light":"#fef2f2",
          "dark":"#82181a"
       },
-      "bg-danger-tertiary-hover":{
+      "danger-tertiary-hover":{
          "light":"#ffe2e2",
          "dark":"#460809"
       },
@@ -216,77 +216,17 @@
          "light":"#99a1af",
          "dark":"#d1d5dc"
       },
-      "border-default-default":{
-         "light":"#e5e7eb",
-         "dark":"#364153"
-      },
-      "border-default-secondary":{
-         "light":"#99a1af",
-         "dark":"#4a5565"
-      },
-      "border-default-tertiary":{
-         "light":"#4a5565",
-         "dark":"#99a1af"
-      },
-      "border-neutral-default":{
+      "border-default":{
          "light":"#0f172b",
          "dark":"#f1f5f9"
       },
-      "border-neutral-secondary":{
+      "border-secondary":{
          "light":"#45556c",
          "dark":"#62748e"
       },
-      "border-neutral-tertiary":{
+      "border-tertiary":{
          "light":"#cad5e2",
          "dark":"#45556c"
-      },
-      "border-brand-default":{
-         "light":"#635bff",
-         "dark":"#dde3ff"
-      },
-      "border-brand-secondary":{
-         "light":"#7578ff",
-         "dark":"#9ca7ff"
-      },
-      "border-brand-tertiary":{
-         "light":"#c2cbff",
-         "dark":"#7578ff"
-      },
-      "border-positive-default":{
-         "light":"#016630",
-         "dark":"#b9f8cf"
-      },
-      "border-positive-secondary":{
-         "light":"#00a63e",
-         "dark":"#05df72"
-      },
-      "border-positive-tertiary":{
-         "light":"#7bf1a8",
-         "dark":"#00a63e"
-      },
-      "border-warning-default":{
-         "light":"#7b3306",
-         "dark":"#fee685"
-      },
-      "border-warning-secondary":{
-         "light":"#bb4d00",
-         "dark":"#ffba00"
-      },
-      "border-warning-tertiary":{
-         "light":"#fee685",
-         "dark":"#e17100"
-      },
-      "border-danger-default":{
-         "light":"#c10007",
-         "dark":"#ffc9c9"
-      },
-      "border-danger-secondary":{
-         "light":"#e7000b",
-         "dark":"#ff6467"
-      },
-      "border-danger-tertiary":{
-         "light":"#ffa2a2",
-         "dark":"#fb2c36"
       },
       "text-inverse-primary":{
          "light":"#ffffff",

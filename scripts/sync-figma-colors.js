@@ -117,431 +117,426 @@ function findClosestPrimitive(targetHex, customPrimitives) {
 
 console.log('🎨 Syncing Figma colors to TailwindCSS 4.1...\n');
 
-// Generate custom primitives
-console.log('📝 Step 1: Processing custom color primitives...');
-const { 'utility-classes-custom': customColors } = figmaColors;
-
-const colorGroups = {};
-Object.entries(customColors).forEach(([colorName, value]) => {
-  const match = colorName.match(/color-(.+)-(\d+)/);
-  if (match) {
-    const [, baseName, shade] = match;
-    if (!colorGroups[baseName]) colorGroups[baseName] = {};
-    colorGroups[baseName][shade] = value.default;
-  }
-});
-
-let customThemeBlock = '';
-Object.entries(colorGroups).forEach(([baseName, shades]) => {
-  customThemeBlock += `    /* ${baseName.charAt(0).toUpperCase() + baseName.slice(1)} Colors */\n`;
-  Object.entries(shades).forEach(([shade, hexColor]) => {
-    const oklchColor = hexToOklch(hexColor);
-    customThemeBlock += `    --color-${baseName}-${shade}: ${oklchColor};\n`;
-  });
-  customThemeBlock += '\n';
-});
-
-// Process semantic colors
-console.log('📝 Step 2: Processing semantic colors...');
-const { 'semantic-colors': semanticColors } = figmaColors;
-
-// Sort semantic colors: base variants first, hover variants last
-const sortedSemanticEntries = Object.entries(semanticColors).sort(([nameA], [nameB]) => {
-  const isHoverA = nameA.endsWith('-hover');
-  const isHoverB = nameB.endsWith('-hover');
-  
-  if (isHoverA === isHoverB) return 0;
-  return isHoverA ? 1 : -1;
-});
-
-// Group semantic colors
-const semanticGroups = {};
-sortedSemanticEntries.forEach(([semanticName, colors]) => {
-  const parts = semanticName.split('-');
-  const type = parts[0]; // bg, text, border
-  const category = parts[1]; // brand, neutral, positive, warning, danger, default
-  const variant = parts.slice(2).join('-'); // default, secondary, tertiary, default-hover, secondary-hover
-  
-  const baseKey = `${type}-${category}`;
-  if (!semanticGroups[baseKey]) {
-    semanticGroups[baseKey] = {};
-  }
-  semanticGroups[baseKey][variant] = colors;
-});
-
-// --- Parse all class blocks in the current file ---
+// --- Parse the current globals.css file first to extract existing colors ---
 const globalsPath = path.join(__dirname, '../src/app/globals.css');
 let existingCSS = '';
 if (fs.existsSync(globalsPath)) {
   existingCSS = fs.readFileSync(globalsPath, 'utf8');
 }
 
-// Parse all class blocks (including custom, legacy, and semantic)
-const classBlockRegex = /(\.[\w-]+[^{]*\{[\s\S]*?\})/g;
-const classBlocks = [];
-let match;
-while ((match = classBlockRegex.exec(existingCSS)) !== null) {
-  classBlocks.push(match[0]);
-}
-
-// Map: className -> block
-const classMap = {};
-classBlocks.forEach(block => {
-  const nameMatch = block.match(/\.(\w[\w-]*)/);
-  if (nameMatch) {
-    classMap[nameMatch[1]] = block;
-  }
-});
-
-// --- Generate new semantic classes ---
-let semanticClassesMap = {};
-Object.entries(semanticGroups).forEach(([baseKey, variants]) => {
-  const [type, category] = baseKey.split('-');
-  Object.entries(variants)
-    .filter(([variant]) => !variant.endsWith('-hover'))
-    .forEach(([variant, colors]) => {
-      const lightColor = colors.light;
-      const lightPrimitive = findClosestPrimitive(lightColor, colorGroups);
-      if (!lightPrimitive) return;
-      let className;
-      if (variant === 'default') {
-        className = `${type}-${category}`;
-      } else {
-        className = `${type}-${category}-${variant}`;
-      }
-      let block = `  .${className} {\n    @apply ${type}-${lightPrimitive};\n  }`;
-      const hoverVariant = `${variant}-hover`;
-      if (variants[hoverVariant]) {
-        const hoverColors = variants[hoverVariant];
-        const hoverLightPrimitive = findClosestPrimitive(hoverColors.light, colorGroups);
-        if (hoverLightPrimitive) {
-          const hoverClassName = `${className}-hover`;
-          semanticClassesMap[hoverClassName] = `  .${hoverClassName}:hover {\n    @apply ${type}-${hoverLightPrimitive};\n  }`;
-        }
-      }
-      semanticClassesMap[className] = block;
-    });
-});
-
-// --- Compose the final CSS with block replacement ---
-
-// Read the existing file and extract blocks
-let fileContent = '';
-if (fs.existsSync(globalsPath)) {
-  fileContent = fs.readFileSync(globalsPath, 'utf8');
-}
-
-// Regexes for block extraction
-const themeBlockRegex = /(:root[\s\S]*?@theme inline \{[\s\S]*?\n\})/;
-const utilitiesBlockRegex = /(@layer utilities \{)([\s\S]*?)(\n\})/;
-const mediaBlockRegex = /@media \(prefers-color-scheme: dark\) \{[\s\S]*?\n\}/;
-
-// Extract blocks
+// Extract header (everything before first @theme or :root)
 let header = '';
-let mediaBlock = '';
-let footer = '';
-
-// Header: everything before :root
-const rootIndex = fileContent.indexOf(':root');
-if (rootIndex !== -1) {
-  header = fileContent.slice(0, rootIndex);
+const firstThemeIndex = existingCSS.search(/@theme\s|:root\s*\{/);
+if (firstThemeIndex !== -1) {
+  header = existingCSS.slice(0, firstThemeIndex).trimEnd();
 } else {
-  // If not found, use default header
-  header = `/* \n * Generated TailwindCSS 4.1 styles from Figma colors\n * This file is auto-generated. Do not edit manually.\n * Run: npm run build:colors to regenerate\n */\n\n@import \"tailwindcss\";\n\n`;
+  header = `/* \n * Generated TailwindCSS 4.1 styles from Figma colors\n * This file is auto-generated. Do not edit manually.\n * Run: npm run build:colors to regenerate\n */\n\n@import \"tailwindcss\";`;
 }
 
-// Generate new theme block with updated primitives
-// First, extract existing custom colors from the current theme block
+// Extract existing theme block content to preserve custom variables
 let existingCustomColors = '';
-const existingThemeMatch = fileContent.match(/@theme inline \{([\s\S]*?)\}/);
-if (existingThemeMatch) {
-  const themeContent = existingThemeMatch[1];
-  
-  // Split content into lines to preserve formatting and comments
+let existingPrimitiveColors = {};
+
+// Extract existing @theme block content to preserve manually added colors
+const existingPrimitiveThemeRegex = /@theme\s*\{([\s\S]*?)\}/;
+const existingPrimitiveThemeMatch = existingCSS.match(existingPrimitiveThemeRegex);
+
+if (existingPrimitiveThemeMatch) {
+  const themeContent = existingPrimitiveThemeMatch[1];
   const lines = themeContent.split('\n');
-  let inCustomSection = false;
-  let customLines = [];
   
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    const trimmedLine = line.trim();
     
-    // Skip Figma color group comments (e.g., "/* Brand Colors */", "/* Big-stone Colors */")
+    // Skip empty lines and comments
+    if (!trimmedLine || trimmedLine.startsWith('/*')) {
+      continue;
+    }
+    
+    // Extract existing color variables
+    const colorVarMatch = line.match(/--color-([a-zA-Z0-9_-]+)-(\d+):\s*(.+);/);
+    if (colorVarMatch) {
+      const [, baseName, shade, value] = colorVarMatch;
+      if (!existingPrimitiveColors[baseName]) {
+        existingPrimitiveColors[baseName] = {};
+      }
+      existingPrimitiveColors[baseName][shade] = value.trim();
+    }
+  }
+}
+
+console.log('📝 Step 1: Processing custom color primitives...');
+
+// --- Process utility classes (custom primitives) ---
+const utilityClasses = figmaColors['utility-classes-custom'] || {};
+const colorGroups = {};
+
+// Generate semantic CSS variables that reference primitive colors
+const semanticVariables = {
+  light: {},
+  dark: {}
+};
+
+Object.entries(utilityClasses).forEach(([colorKey, colorData]) => {
+  const match = colorKey.match(/color-(.+)-(\d+)/);
+  if (match) {
+    const [, baseName, shade] = match;
+    if (!colorGroups[baseName]) colorGroups[baseName] = {};
+    colorGroups[baseName][shade] = colorData.default;
+  }
+});
+
+// Generate Figma primitive colors and merge with existing colors (NO default Tailwind colors in CSS)
+let allColorGroups = { ...existingPrimitiveColors };
+
+// Add/update Figma colors (these take precedence but preserve manual ones)
+Object.entries(colorGroups).forEach(([baseName, shades]) => {
+  if (!allColorGroups[baseName]) {
+    allColorGroups[baseName] = {};
+  }
+  // Merge Figma colors with existing colors (Figma colors take precedence for updates)
+  Object.entries(shades).forEach(([shade, hexColor]) => {
+    const oklchColor = hexToOklch(hexColor);
+    allColorGroups[baseName][shade] = oklchColor;
+  });
+});
+
+console.log('📝 Step 2: Processing semantic colors...');
+
+// --- Process semantic colors ---
+const semanticColors = figmaColors['semantic-colors'] || {};
+
+Object.entries(semanticColors).forEach(([semanticName, colorData]) => {
+  // Transform color names according to naming convention
+  let transformedName = semanticName;
+  
+  // Special handling for text colors: strip -default from anywhere in the name
+  if (transformedName.startsWith('text-') && transformedName.includes('-default-')) {
+    transformedName = transformedName.replace('-default-', '-');
+  }
+  
+  // Convert *-default-hover to *-hover
+  if (transformedName.endsWith('-default-hover')) {
+    transformedName = transformedName.replace('-default-hover', '-hover');
+  }
+  // Convert *-default to * (but only if it doesn't end with -hover)
+  else if (transformedName.endsWith('-default')) {
+    transformedName = transformedName.replace('-default', '');
+  }
+  
+  const lightColor = colorData.light;
+  const darkColor = colorData.dark;
+  
+  if (lightColor && darkColor) {
+    // Find matching colors from custom colors (existing + Figma) and default Tailwind colors
+    const allAvailableColors = { ...allColorGroups, ...defaultTailwindColors };
+    const lightMatch = findClosestPrimitive(lightColor, allAvailableColors);
+    const darkMatch = findClosestPrimitive(darkColor, allAvailableColors);
+    
+    if (lightMatch && darkMatch) {
+      semanticVariables.light[transformedName] = `var(--color-${lightMatch})`;
+      semanticVariables.dark[transformedName] = `var(--color-${darkMatch})`;
+    } else {
+      console.warn(`⚠️  Could not find Tailwind match for semantic color: ${semanticName}`);
+      console.warn(`   Light: ${lightColor} Dark: ${darkColor}`);
+    }
+  }
+});
+
+// Remove existing @theme blocks from CSS to prevent duplication
+let cleanedCSS = existingCSS.replace(/@theme\s*\{[\s\S]*?\}/g, '');
+cleanedCSS = cleanedCSS.replace(/@media\s*\([^)]*\)\s*\{[\s\S]*?\}/g, '');
+
+const themeBlockRegex = /@theme inline \{([\s\S]*?)\}/;
+const existingThemeMatch = cleanedCSS.match(themeBlockRegex);
+
+if (existingThemeMatch) {
+  const themeContent = existingThemeMatch[1];
+  const lines = themeContent.split('\n');
+  let customLines = [];
+  let skipSemanticSection = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmedLine = line.trim();
+    
+    // Skip empty lines at the beginning
+    if (!trimmedLine && customLines.length === 0) {
+      continue;
+    }
+    
+    // Skip Figma color group comments and their associated colors
     const figmaCommentMatch = line.match(/\/\*\s*([A-Z][a-z-]+)\s+Colors\s*\*\//);
     if (figmaCommentMatch) {
       const groupName = figmaCommentMatch[1].toLowerCase();
-      // Check if this is a Figma color group
-      if (colorGroups[groupName]) {
-        inCustomSection = false;
-        continue; // Skip this line
-      }
-    }
-    
-    // Check if this line contains a color variable
-    const colorMatch = line.match(/--color-([a-zA-Z0-9_-]+):/);
-    if (colorMatch) {
-      const colorName = colorMatch[1];
-      
-      // Skip standard theme variables
-      if (['background', 'foreground', 'font-sans', 'font-mono'].includes(colorName)) {
+      // Skip all color groups (both existing and Figma-generated)
+      if (Object.keys(allColorGroups).map(name => name.toLowerCase()).includes(groupName)) {
+        // Skip until next comment or end
+        let j = i + 1;
+        while (j < lines.length && !lines[j].trim().startsWith('/*') && !lines[j].trim().startsWith('--')) {
+          j++;
+        }
+        i = j - 1;
         continue;
       }
-      
-      // Check if this color is NOT from Figma (i.e., it's a custom addition)
-      const isFromFigma = Object.entries(colorGroups).some(([baseName, shades]) => 
-        Object.keys(shades).some(shade => `${baseName}-${shade}` === colorName)
-      );
-      
-      if (!isFromFigma) {
-        // This is a custom color section, start collecting lines
-        inCustomSection = true;
-        
-        // Look backwards for any preceding comment lines (but not Figma color group comments)
-        let j = i - 1;
-        let precedingLines = [];
-        while (j >= 0 && (lines[j].trim().startsWith('/*') || lines[j].trim().startsWith('*') || lines[j].trim() === '' || lines[j].trim().startsWith('//'))) {
-          const prevLine = lines[j];
-          // Skip Figma color group comments
-          const prevFigmaCommentMatch = prevLine.match(/\/\*\s*([A-Z][a-z-]+)\s+Colors\s*\*\//);
-          if (prevFigmaCommentMatch) {
-            const prevGroupName = prevFigmaCommentMatch[1].toLowerCase();
-            if (colorGroups[prevGroupName]) {
-              break; // Stop here, don't include Figma comments
-            }
-          }
-          
-          precedingLines.unshift(prevLine);
-          j--;
-        }
-        
-        // Add preceding lines (but limit consecutive empty lines to 1)
-        let lastWasEmpty = false;
-        for (const prevLine of precedingLines) {
-          if (prevLine.trim() === '') {
-            if (!lastWasEmpty) {
-              customLines.push(prevLine);
-              lastWasEmpty = true;
-            }
-          } else {
-            customLines.push(prevLine);
-            lastWasEmpty = false;
-          }
-        }
-        
-        // Add the color line itself
-        customLines.push(line);
-      } else {
-        inCustomSection = false;
-      }
-    } else if (inCustomSection && (line.trim().startsWith('/*') || line.trim().startsWith('*') || line.trim() === '' || line.trim().startsWith('//'))) {
-      // This is a comment or empty line in a custom section
-      // But make sure it's not a Figma color group comment
-      const commentMatch = line.match(/\/\*\s*([A-Z][a-z-]+)\s+Colors\s*\*\//);
-      if (commentMatch) {
-        const groupName = commentMatch[1].toLowerCase();
-        if (colorGroups[groupName]) {
-          inCustomSection = false;
-          continue; // Skip Figma color group comments
-        }
-      }
+    }
+    
+    // Skip semantic color comments and sections
+    if (trimmedLine === '/* Semantic Colors - Light Theme */' || trimmedLine === '/* Semantic Colors - Dark Theme */') {
+      skipSemanticSection = true;
+      continue;
+    }
+    
+    // Skip individual category headers (Base, Brand, Text, etc.)
+    const categoryHeaderMatch = trimmedLine.match(/^\/\* (Base|Brand|Neutral|Positive|Warning|Danger|Text|Border) \*\/$/);
+    if (categoryHeaderMatch) {
+      skipSemanticSection = true;
+      continue;
+    }
+    
+    // Skip semantic variable lines (variables that reference other CSS variables)
+    const semanticVarMatch = line.match(/--color-([a-zA-Z0-9_-]+):\s*var\(--color-([a-zA-Z0-9_-]+)\);/);
+    if (semanticVarMatch) {
+      skipSemanticSection = true;
+      continue;
+    }
+    
+    // If we hit a non-semantic variable, stop skipping
+    if (trimmedLine.startsWith('--') && !semanticVarMatch) {
+      skipSemanticSection = false;
+    }
+    
+    // Only preserve non-semantic content
+    if (!skipSemanticSection && trimmedLine) {
       customLines.push(line);
-    } else {
-      inCustomSection = false;
     }
   }
   
-  // Clean up the custom lines: remove excessive blank lines
   if (customLines.length > 0) {
-    // Remove leading empty lines
-    while (customLines.length > 0 && customLines[0].trim() === '') {
-      customLines.shift();
-    }
-    
     // Remove trailing empty lines
-    while (customLines.length > 0 && customLines[customLines.length - 1].trim() === '') {
+    while (customLines.length > 0 && !customLines[customLines.length - 1].trim()) {
       customLines.pop();
     }
-    
-    // Limit consecutive empty lines to maximum of 1
-    const cleanedLines = [];
-    let consecutiveEmpty = 0;
-    for (const line of customLines) {
-      if (line.trim() === '') {
-        consecutiveEmpty++;
-        if (consecutiveEmpty <= 1) {
-          cleanedLines.push(line);
-        }
-      } else {
-        consecutiveEmpty = 0;
-        cleanedLines.push(line);
+    existingCustomColors = customLines.join('\n');
+  }
+}
+
+// Generate semantic variables for light theme
+let semanticLightBlock = '';
+if (Object.keys(semanticVariables.light).length > 0) {
+  semanticLightBlock += '  /* Semantic Colors - Light Theme */\n';
+  
+  // Dynamically group variables by category (everything before first hyphen)
+  const categories = {};
+  
+  // Extract categories from variable names
+  Object.entries(semanticVariables.light).forEach(([semanticName, varRef]) => {
+    const categoryMatch = semanticName.match(/^([^-]+)(-|$)/);
+    if (categoryMatch) {
+      const categoryKey = categoryMatch[1];
+      const categoryName = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
+      
+      if (!categories[categoryName]) {
+        categories[categoryName] = [];
       }
+      categories[categoryName].push([semanticName, varRef]);
     }
-    
-    if (cleanedLines.length > 0) {
-      existingCustomColors = cleanedLines.join('\n') + '\n\n';
-    }
-  }
+  });
+  
+  // Generate organized output with dynamic categories
+  Object.entries(categories)
+    .sort(([a], [b]) => a.localeCompare(b)) // Sort categories alphabetically
+    .forEach(([categoryName, vars]) => {
+      if (vars.length > 0) {
+        semanticLightBlock += `  /* ${categoryName} */\n`;
+        vars.forEach(([semanticName, varRef]) => {
+          semanticLightBlock += `  --color-${semanticName}: ${varRef};\n`;
+        });
+        semanticLightBlock += '\n';
+      }
+    });
+  
+  // Remove trailing newline
+  semanticLightBlock = semanticLightBlock.trimEnd() + '\n';
 }
 
-// Generate Figma colors with proper indentation (2 spaces, not 4)
+// Generate the complete theme block with all colors (existing + Figma) AND semantic colors
 let figmaThemeBlock = '';
-Object.entries(colorGroups).forEach(([baseName, shades]) => {
-  figmaThemeBlock += `  /* ${baseName.charAt(0).toUpperCase() + baseName.slice(1)} Colors */\n`;
-  Object.entries(shades).forEach(([shade, hexColor]) => {
-    const oklchColor = hexToOklch(hexColor);
-    figmaThemeBlock += `  --color-${baseName}-${shade}: ${oklchColor};\n`;
+Object.entries(allColorGroups)
+  .sort(([a], [b]) => a.localeCompare(b)) // Sort alphabetically
+  .forEach(([baseName, shades]) => {
+    if (typeof shades === 'string') {
+      // Handle single colors like white/black
+      figmaThemeBlock += `  /* ${baseName.charAt(0).toUpperCase() + baseName.slice(1)} */\n`;
+      figmaThemeBlock += `  --color-${baseName}: ${shades};\n\n`;
+    } else {
+      // Handle color scales
+      figmaThemeBlock += `  /* ${baseName.charAt(0).toUpperCase() + baseName.slice(1)} Colors */\n`;
+      Object.entries(shades)
+        .sort(([a], [b]) => parseInt(a) - parseInt(b)) // Sort by shade number
+        .forEach(([shade, colorValue]) => {
+          figmaThemeBlock += `  --color-${baseName}-${shade}: ${colorValue};\n`;
+        });
+      figmaThemeBlock += '\n';
+    }
   });
-  figmaThemeBlock += '\n';
-});
 
-const newThemeBlock = `:root {
-  --background: #ffffff;
-  --foreground: #171717;
+// Build main theme block with both primitives AND semantic colors for utility class generation
+let mainThemeBlock = '';
+const themeContent = figmaThemeBlock.trimEnd() + (figmaThemeBlock && semanticLightBlock ? '\n\n' : '') + (semanticLightBlock || '');
+if (themeContent.trim()) {
+  mainThemeBlock = `@theme {
+${themeContent.trimEnd()}
+}`;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+// Build theme inline block with only fonts (non-color configuration)
+let semanticThemeBlock = '';
+if (existingCustomColors.trim()) {
+  semanticThemeBlock = `@theme inline {
+${existingCustomColors.trimEnd()}
+}`;
+}
 
-${existingCustomColors}${figmaThemeBlock}}`;
+// Generate dark theme semantic variables block
+let darkSemanticBlock = '';
+if (Object.keys(semanticVariables.dark).length > 0) {
+  darkSemanticBlock += '  /* Semantic Colors - Dark Theme */\n';
+  
+  // Dynamically group variables by category (everything before first hyphen)
+  const categories = {};
+  
+  // Extract categories from variable names
+  Object.entries(semanticVariables.dark).forEach(([semanticName, varRef]) => {
+    const categoryMatch = semanticName.match(/^([^-]+)(-|$)/);
+    if (categoryMatch) {
+      const categoryKey = categoryMatch[1];
+      const categoryName = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
+      
+      if (!categories[categoryName]) {
+        categories[categoryName] = [];
+      }
+      categories[categoryName].push([semanticName, varRef]);
+    }
+  });
+  
+  // Generate organized output with dynamic categories
+  Object.entries(categories)
+    .sort(([a], [b]) => a.localeCompare(b)) // Sort categories alphabetically
+    .forEach(([categoryName, vars]) => {
+      if (vars.length > 0) {
+        darkSemanticBlock += `  /* ${categoryName} */\n`;
+        vars.forEach(([semanticName, varRef]) => {
+          darkSemanticBlock += `  --color-${semanticName}: ${varRef};\n`;
+        });
+        darkSemanticBlock += '\n';
+      }
+    });
+  
+  // Remove trailing newline
+  darkSemanticBlock = darkSemanticBlock.trimEnd() + '\n';
+}
 
-// Media block (preserve existing)
-const mediaMatch = fileContent.match(mediaBlockRegex);
-if (mediaMatch) {
-  mediaBlock = mediaMatch[0];
+// Build media block for dark theme
+let darkModeBlock = '';
+if (darkSemanticBlock.trim()) {
+  darkModeBlock = `.dark {
+${darkSemanticBlock}}`;
+}
+
+// Extract utilities block (preserve existing content, including font classes)
+let utilitiesBlock = '';
+const utilitiesRegex = /@layer utilities \{([\s\S]*?)\n\}/;
+const existingUtilitiesMatch = cleanedCSS.match(utilitiesRegex);
+
+if (existingUtilitiesMatch) {
+  const existingUtilities = existingUtilitiesMatch[1];
+  
+  // Remove old semantic color classes but preserve everything else
+  const lines = existingUtilities.split('\n');
+  const preservedLines = [];
+  let inSemanticColorClass = false;
+  let braceCount = 0;
+  
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+    
+    // Check if this is a semantic color class
+    const classMatch = trimmedLine.match(/^\.(bg-|text-|border-)(base|neutral|brand|positive|warning|danger|default|inverse)/);
+    if (classMatch) {
+      inSemanticColorClass = true;
+      braceCount = 0;
+      continue;
+    }
+    
+    if (inSemanticColorClass) {
+      // Count braces to know when the class ends
+      braceCount += (trimmedLine.match(/\{/g) || []).length;
+      braceCount -= (trimmedLine.match(/\}/g) || []).length;
+      
+      if (braceCount <= 0) {
+        inSemanticColorClass = false;
+      }
+      continue;
+    }
+    
+    // Preserve all other content (font classes, custom classes, comments)
+    preservedLines.push(line);
+  }
+  
+  utilitiesBlock = `@layer utilities {${preservedLines.join('\n')}\n}`;
 } else {
-  mediaBlock = `@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}`;
+  utilitiesBlock = `@layer utilities {\n}`;
 }
 
-// Update utilities block using the same approach as font sync script
-let newUtilitiesBlock = `/* Semantic Color Classes */
-@layer utilities {
-}`;
-
-const utilitiesMatch = fileContent.match(utilitiesBlockRegex);
-if (utilitiesMatch) {
-  const existingUtilities = utilitiesMatch[2];
-  
-  // List of font class names that should be ignored by the color sync script
-  const fontClassNames = new Set([
-    'font-display', 'font-title', 'font-title-small', 'font-subtitle', 'font-subtitle-small',
-    'font-body-large', 'font-body', 'font-body-small', 'font-input', 'font-label', 
-    'font-caption', 'font-code', 'font-button'
-  ]);
-  
-  // Extract and preserve font classes that are already in the utilities block
-  const fontClasses = [];
-  const fontClassRegex = /(\s*\.font-[a-zA-Z0-9_-]+\s*\{\s*@apply[^}]*\})/g;
-  let fontMatch;
-  
-  while ((fontMatch = fontClassRegex.exec(existingUtilities)) !== null) {
-    fontClasses.push(fontMatch[1].trim());
-  }
-  
-  // Extract ALL custom classes that aren't color classes or font classes
-  const customClasses = [];
-  
-  // Find all CSS classes and standalone comments in the utilities block
-  const allContentRegex = /((?:\s*\/\*[^*]*\*\/\s*)*\s*\.[a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?\s*\{[^}]*\}|(?:^|\n)\s*\/\*[^*]*\*\/(?=\s*(?:\n|$)))/gm;
-  let contentMatch;
-  
-  while ((contentMatch = allContentRegex.exec(existingUtilities)) !== null) {
-    const fullMatch = contentMatch[1].trim();
-    
-    // Check if this is a standalone comment (not attached to a class)
-    if (/^\/\*[^*]*\*\/$/.test(fullMatch)) {
-      customClasses.push(fullMatch);
-      continue;
-    }
-    
-    // Extract class name from CSS rule
-    const classNameMatch = fullMatch.match(/\.([a-zA-Z0-9_-]+)/);
-    if (!classNameMatch) continue;
-    
-    const className = classNameMatch[1];
-    
-    // Skip if it's a color class (bg-, text-, border-) - we're regenerating these
-    if (/^(bg-|text-|border-)/.test(className)) {
-      continue;
-    }
-    
-    // Skip if it's a font class - these are handled separately
-    if (fontClassNames.has(className) || className.startsWith('font-')) {
-      continue;
-    }
-    
-    // This is a custom class (possibly with preceding comments) - preserve it
-    customClasses.push(fullMatch);
-  }
-  
-  // Build new utilities content
-  const newUtilitiesContent = [];
-  
-  // Add semantic color classes from Figma
-  const colorClassesContent = [];
-  Object.keys(semanticClassesMap).forEach(className => {
-    colorClassesContent.push(semanticClassesMap[className].split('\n').map(line => line.trim() ? '  ' + line : line).join('\n'));
-  });
-  if (colorClassesContent.length > 0) {
-    newUtilitiesContent.push(colorClassesContent.join('\n\n'));
-  }
-  
-  // Add font classes
-  if (fontClasses.length > 0) {
-    newUtilitiesContent.push(fontClasses.map(cls => '  ' + cls).join('\n\n'));
-  }
-  
-  // Add custom classes
-  if (customClasses.length > 0) {
-    newUtilitiesContent.push(customClasses.map(cls => '  ' + cls).join('\n\n'));
-  }
-  
-  // Build the complete new utilities block
-  const finalUtilitiesContent = newUtilitiesContent.join('\n\n');
-  newUtilitiesBlock = `/* Semantic Color Classes */\n@layer utilities {\n${finalUtilitiesContent}\n}`;
-  
-  // Replace the entire utilities block
-  fileContent = fileContent.replace(utilitiesMatch[0], newUtilitiesBlock);
-}
-
-// Footer: find body and other elements that should be preserved
-const bodyMatch = fileContent.match(/(body\s*\{[\s\S]*?\}[\s\S]*$)/);
+// Extract footer (body and other elements)
+let footer = '';
+const bodyMatch = cleanedCSS.match(/(body\s*\{[\s\S]*?)\s*$/);
 if (bodyMatch) {
   footer = bodyMatch[0].trim();
-} else {
-  footer = `body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}`;
 }
 
-// Compose the new file
-const cssContent = `${header}${newThemeBlock}
+// Compose the final CSS
+const cssBlocks = [];
 
-${mediaBlock}
+// Add header
+if (header.trim()) {
+  cssBlocks.push(header.trim());
+}
 
-${newUtilitiesBlock}
+// Add CSS blocks with proper spacing
+if (mainThemeBlock) {
+  cssBlocks.push(mainThemeBlock);
+}
 
-${footer}
-`;
+if (semanticThemeBlock) {
+  cssBlocks.push(semanticThemeBlock);
+}
+
+if (darkModeBlock) {
+  cssBlocks.push(darkModeBlock);
+}
+
+if (utilitiesBlock) {
+  cssBlocks.push(utilitiesBlock);
+}
+
+if (footer && footer.trim()) {
+  cssBlocks.push(footer.trim());
+}
+
+const cssContent = cssBlocks.join('\n\n') + '\n';
 
 fs.writeFileSync(globalsPath, cssContent);
 
 console.log('✅ CSS generation complete!');
 console.log(`📁 Updated: ${globalsPath}`);
 console.log('\n📊 Summary:');
-console.log(`   • ${Object.keys(colorGroups).length} custom color primitives added to @theme`);
-console.log(`   • ${Object.keys(semanticGroups).length} semantic color groups processed`);
-console.log(`   • All hover states use :hover pseudo-classes`);
-console.log(`   • bg-*-default converted to bg-* (no "default" suffix)`);
-console.log(`   • All colors converted to OKLCH format`);
-console.log(`   • Dark mode support via CSS custom properties`);
-console.log(`   • No class blocks deleted; all preserved or updated`);
-console.log('\n🚀 Ready to use in your components!'); 
+console.log(`   • ${Object.keys(allColorGroups).length} custom colors + ${Object.keys(semanticVariables.light).length} semantic colors in @theme for utility class generation`);
+console.log(`   • ${Object.keys(existingPrimitiveColors).length} existing + ${Object.keys(colorGroups).length} from Figma custom colors (default Tailwind colors NOT added to CSS)`);
+console.log(`   • Semantic colors use CSS variable references (not OKLCH) with --color- prefix`);
+console.log(`   • Dark theme support via .dark class with CSS custom properties`);
+console.log(`   • All existing content preserved (no deletions)`);
+console.log(`   • Fonts and configuration remain in @theme inline`);
+console.log('\n🚀 Ready to use in your components! (e.g., bg-base, text-neutral-tertiary)'); 
