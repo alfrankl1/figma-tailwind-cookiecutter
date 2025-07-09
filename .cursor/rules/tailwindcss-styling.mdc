@@ -1,0 +1,390 @@
+---
+alwaysApply: false
+---
+
+# TailwindCSS v4.1 Core Styling Guidelines
+
+This project strictly adheres to TailwindCSS v4.1 core concepts for all styling and theming. **Only under exceptional circumstances and explicit instruction should these rules be broken.**
+
+## 1. Utility-First Styling Approach
+
+### ✅ DO: Use Utility Classes
+- Build components using single-purpose utility classes directly in markup
+- Combine multiple utilities to achieve complex designs
+- Example: `class="flex items-center gap-4 p-6 bg-white rounded-lg shadow-lg"`
+
+### ❌ DON'T: Create Custom CSS Classes
+- Avoid writing custom CSS unless absolutely necessary
+- Don't create component-specific CSS classes for styling
+- Don't use inline styles (use utilities instead for consistency and responsive features)
+
+```tsx
+// ✅ GOOD - Utility classes
+<div className="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg">
+  <img className="size-12 shrink-0" src="/logo.svg" alt="Logo" />
+  <div className="text-xl font-medium text-black">Content</div>
+</div>
+
+// ❌ BAD - Custom CSS or inline styles
+<div className="custom-card" style={{ padding: '24px' }}>
+```
+
+## 2. Responsive Design
+
+### Mobile-First Approach
+- Use responsive prefixes: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+- Start with mobile styles, then add larger breakpoint overrides
+- Always test responsive behavior across breakpoints
+
+```tsx
+// ✅ Mobile-first responsive design
+<div className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:gap-6 lg:p-8">
+  <img className="mx-auto h-16 sm:mx-0 sm:h-24" />
+  <div className="text-center sm:text-left">
+    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold">Title</h3>
+  </div>
+</div>
+```
+
+## 3. Interactive States
+
+### State Variants
+- Use state prefixes: `hover:`, `focus:`, `active:`, `disabled:`, `group-hover:`
+- Apply hover states consistently across interactive elements
+- Ensure focus states for accessibility
+
+```tsx
+// ✅ Proper state handling
+<button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 active:bg-blue-700 disabled:opacity-50">
+  Click me
+</button>
+```
+
+## 4. Dark Mode Support
+
+### Use Dark Mode Variants
+- Apply `dark:` prefix for dark mode styles
+- Ensure all components work in both light and dark modes
+- Use semantic color patterns that adapt to theme
+
+```tsx
+// ✅ Dark mode compatible
+<div className="bg-white dark:bg-slate-800 text-black dark:text-white p-6 border border-gray-200 dark:border-gray-700">
+  <h2 className="text-gray-900 dark:text-gray-100">Heading</h2>
+  <p className="text-gray-600 dark:text-gray-400">Description</p>
+</div>
+```
+
+## 5. Design System Constraints
+
+### Use Predefined Values
+- Stick to Tailwind's spacing scale: `p-1`, `p-2`, `p-4`, `p-6`, `p-8`, etc.
+- Use predefined colors: `blue-500`, `gray-100`, `red-600`, etc.
+- Follow typography scale: `text-sm`, `text-base`, `text-lg`, `text-xl`, etc.
+
+### Custom Values (Use Sparingly)
+- Use arbitrary values only when predefined scale doesn't meet requirements
+- Format: `w-[32rem]`, `bg-[#1e40af]`, `text-[14px]`
+- Prefer extending theme in config over arbitrary values
+
+## 6. Component Organization
+
+### Manage Duplication
+- **Loops**: For repeated elements, use component loops instead of duplicating classes
+- **Components**: Extract reusable UI patterns into React/Vue components
+- **Multi-cursor editing**: For localized duplication, use editor features to edit simultaneously
+
+```tsx
+// ✅ Component abstraction for reusable patterns
+const Button = ({ variant, children, ...props }) => {
+  const baseClasses = "px-4 py-2 rounded font-medium transition-colors";
+  const variantClasses = {
+    primary: "bg-blue-500 text-white hover:bg-blue-600",
+    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300"
+  };
+  
+  return (
+    <button className={`${baseClasses} ${variantClasses[variant]}`} {...props}>
+      {children}
+    </button>
+  );
+};
+```
+
+## 7. Class Conflict Management
+
+### Avoid Conflicting Classes
+- Never apply conflicting utilities to same element (e.g., `flex grid`)
+- Use conditional classes for different states
+- Use important modifier (`!`) only when absolutely necessary
+
+```tsx
+// ✅ Conditional classes, no conflicts
+<div className={isGrid ? "grid grid-cols-3" : "flex gap-4"}>
+
+// ❌ Conflicting classes
+<div className="flex grid">
+```
+
+## 8. Custom Styles Integration
+
+### When Custom CSS is Acceptable
+- Complex animations not achievable with utilities
+- Third-party component integration requirements
+- Legacy system constraints
+
+### Custom CSS Guidelines
+- Use `@layer components` for component-level custom classes
+- Use `@layer utilities` for custom utility classes
+- Always use CSS custom properties (variables) from Tailwind theme
+- Prefix custom classes to avoid conflicts
+
+```css
+/* ✅ Proper custom CSS integration */
+@import "tailwindcss";
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+    /* Custom properties when Tailwind utilities insufficient */
+    border-radius: var(--radius-lg);
+    background-color: var(--color-blue-500);
+  }
+}
+```
+
+## 9. Performance and Maintenance
+
+### Class Organization
+- Group related utilities logically in class strings
+- Order: layout → spacing → typography → colors → effects
+- Keep class lists readable and maintainable
+
+```tsx
+// ✅ Well-organized class order
+<div className="flex items-center justify-between p-4 mt-6 text-lg font-semibold text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm">
+```
+
+### Purging and Detection
+- Ensure all dynamic class names are detectable by Tailwind's purge system
+- Use safelist for dynamically constructed classes
+- Avoid string concatenation for class names when possible
+
+## 10. Accessibility Considerations
+
+### Focus Management
+- Always include focus states: `focus:ring-2`, `focus:outline-none`
+- Use proper color contrast ratios
+- Ensure interactive elements have adequate touch targets (min 44px)
+
+```tsx
+// ✅ Accessible interactive element
+<button className="px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+  Accessible Button
+</button>
+```
+
+## Emergency Override Protocol
+
+**Only when explicitly instructed or in exceptional circumstances:**
+1. Document the reason for breaking these rules
+2. Add comments explaining the deviation
+3. Plan migration back to utility-first approach
+4. Seek approval for custom CSS additions
+
+---
+
+**Remember**: TailwindCSS utilities provide consistency, maintainability, and performance benefits. These rules ensure our codebase remains scalable and follows modern CSS architecture patterns.
+# TailwindCSS v4.1 Core Styling Guidelines
+
+This project strictly adheres to TailwindCSS v4.1 core concepts for all styling and theming. **Only under exceptional circumstances and explicit instruction should these rules be broken.**
+
+## 1. Utility-First Styling Approach
+
+### ✅ DO: Use Utility Classes
+- Build components using single-purpose utility classes directly in markup
+- Combine multiple utilities to achieve complex designs
+- Example: `class="flex items-center gap-4 p-6 bg-white rounded-lg shadow-lg"`
+
+### ❌ DON'T: Create Custom CSS Classes
+- Avoid writing custom CSS unless absolutely necessary
+- Don't create component-specific CSS classes for styling
+- Don't use inline styles (use utilities instead for consistency and responsive features)
+
+```tsx
+// ✅ GOOD - Utility classes
+<div className="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg">
+  <img className="size-12 shrink-0" src="/logo.svg" alt="Logo" />
+  <div className="text-xl font-medium text-black">Content</div>
+</div>
+
+// ❌ BAD - Custom CSS or inline styles
+<div className="custom-card" style={{ padding: '24px' }}>
+```
+
+## 2. Responsive Design
+
+### Mobile-First Approach
+- Use responsive prefixes: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+- Start with mobile styles, then add larger breakpoint overrides
+- Always test responsive behavior across breakpoints
+
+```tsx
+// ✅ Mobile-first responsive design
+<div className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:gap-6 lg:p-8">
+  <img className="mx-auto h-16 sm:mx-0 sm:h-24" />
+  <div className="text-center sm:text-left">
+    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold">Title</h3>
+  </div>
+</div>
+```
+
+## 3. Interactive States
+
+### State Variants
+- Use state prefixes: `hover:`, `focus:`, `active:`, `disabled:`, `group-hover:`
+- Apply hover states consistently across interactive elements
+- Ensure focus states for accessibility
+
+```tsx
+// ✅ Proper state handling
+<button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 active:bg-blue-700 disabled:opacity-50">
+  Click me
+</button>
+```
+
+## 4. Dark Mode Support
+
+### Use Dark Mode Variants
+- Apply `dark:` prefix for dark mode styles
+- Ensure all components work in both light and dark modes
+- Use semantic color patterns that adapt to theme
+
+```tsx
+// ✅ Dark mode compatible
+<div className="bg-white dark:bg-slate-800 text-black dark:text-white p-6 border border-gray-200 dark:border-gray-700">
+  <h2 className="text-gray-900 dark:text-gray-100">Heading</h2>
+  <p className="text-gray-600 dark:text-gray-400">Description</p>
+</div>
+```
+
+## 5. Design System Constraints
+
+### Use Predefined Values
+- Stick to Tailwind's spacing scale: `p-1`, `p-2`, `p-4`, `p-6`, `p-8`, etc.
+- Use predefined colors: `blue-500`, `gray-100`, `red-600`, etc.
+- Follow typography scale: `text-sm`, `text-base`, `text-lg`, `text-xl`, etc.
+
+### Custom Values (Use Sparingly)
+- Use arbitrary values only when predefined scale doesn't meet requirements
+- Format: `w-[32rem]`, `bg-[#1e40af]`, `text-[14px]`
+- Prefer extending theme in config over arbitrary values
+
+## 6. Component Organization
+
+### Manage Duplication
+- **Loops**: For repeated elements, use component loops instead of duplicating classes
+- **Components**: Extract reusable UI patterns into React/Vue components
+- **Multi-cursor editing**: For localized duplication, use editor features to edit simultaneously
+
+```tsx
+// ✅ Component abstraction for reusable patterns
+const Button = ({ variant, children, ...props }) => {
+  const baseClasses = "px-4 py-2 rounded font-medium transition-colors";
+  const variantClasses = {
+    primary: "bg-blue-500 text-white hover:bg-blue-600",
+    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300"
+  };
+  
+  return (
+    <button className={`${baseClasses} ${variantClasses[variant]}`} {...props}>
+      {children}
+    </button>
+  );
+};
+```
+
+## 7. Class Conflict Management
+
+### Avoid Conflicting Classes
+- Never apply conflicting utilities to same element (e.g., `flex grid`)
+- Use conditional classes for different states
+- Use important modifier (`!`) only when absolutely necessary
+
+```tsx
+// ✅ Conditional classes, no conflicts
+<div className={isGrid ? "grid grid-cols-3" : "flex gap-4"}>
+
+// ❌ Conflicting classes
+<div className="flex grid">
+```
+
+## 8. Custom Styles Integration
+
+### When Custom CSS is Acceptable
+- Complex animations not achievable with utilities
+- Third-party component integration requirements
+- Legacy system constraints
+
+### Custom CSS Guidelines
+- Use `@layer components` for component-level custom classes
+- Use `@layer utilities` for custom utility classes
+- Always use CSS custom properties (variables) from Tailwind theme
+- Prefix custom classes to avoid conflicts
+
+```css
+/* ✅ Proper custom CSS integration */
+@import "tailwindcss";
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+    /* Custom properties when Tailwind utilities insufficient */
+    border-radius: var(--radius-lg);
+    background-color: var(--color-blue-500);
+  }
+}
+```
+
+## 9. Performance and Maintenance
+
+### Class Organization
+- Group related utilities logically in class strings
+- Order: layout → spacing → typography → colors → effects
+- Keep class lists readable and maintainable
+
+```tsx
+// ✅ Well-organized class order
+<div className="flex items-center justify-between p-4 mt-6 text-lg font-semibold text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm">
+```
+
+### Purging and Detection
+- Ensure all dynamic class names are detectable by Tailwind's purge system
+- Use safelist for dynamically constructed classes
+- Avoid string concatenation for class names when possible
+
+## 10. Accessibility Considerations
+
+### Focus Management
+- Always include focus states: `focus:ring-2`, `focus:outline-none`
+- Use proper color contrast ratios
+- Ensure interactive elements have adequate touch targets (min 44px)
+
+```tsx
+// ✅ Accessible interactive element
+<button className="px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+  Accessible Button
+</button>
+```
+
+## Emergency Override Protocol
+
+**Only when explicitly instructed or in exceptional circumstances:**
+1. Document the reason for breaking these rules
+2. Add comments explaining the deviation
+3. Plan migration back to utility-first approach
+4. Seek approval for custom CSS additions
+
+---
+
+**Remember**: TailwindCSS utilities provide consistency, maintainability, and performance benefits. These rules ensure our codebase remains scalable and follows modern CSS architecture patterns.

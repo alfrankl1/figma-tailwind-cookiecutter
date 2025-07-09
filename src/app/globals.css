@@ -1,4 +1,13 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=DM+Serif+Text:ital@0;1&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
+
+/* 
+ * Up to date with TailwindCSS 4.1
+ * This file is synced with Figma color and font tokens
+ * Run: npm run build:colors to sync colors to @figma-colors.json
+ * Run: npm run build:fonts to sync fonts to @figma-fonts.json
+ */
 
 :root {
   --background: #ffffff;
@@ -10,6 +19,36 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Custom Colors - Not aligned with Figma colors */
+  --color-cat-950: oklch(0.260 0.060 251.3);
+
+  /* Brand Colors */
+  --color-brand-50: oklch(0.957 0.021 274.0);
+  --color-brand-100: oklch(0.920 0.039 276.0);
+  --color-brand-200: oklch(0.853 0.073 277.1);
+  --color-brand-300: oklch(0.755 0.127 277.5);
+  --color-brand-400: oklch(0.639 0.196 278.3);
+  --color-brand-500: oklch(0.578 0.235 278.3);
+  --color-brand-600: oklch(0.505 0.263 277.0);
+  --color-brand-700: oklch(0.454 0.243 277.1);
+  --color-brand-800: oklch(0.394 0.202 277.7);
+  --color-brand-900: oklch(0.352 0.157 279.2);
+  --color-brand-950: oklch(0.252 0.101 282.6);
+
+  /* Big-stone Colors */
+  --color-big-stone-50: oklch(0.976 0.011 243.7);
+  --color-big-stone-100: oklch(0.946 0.024 248.1);
+  --color-big-stone-200: oklch(0.888 0.052 242.2);
+  --color-big-stone-300: oklch(0.797 0.097 241.6);
+  --color-big-stone-400: oklch(0.706 0.139 242.2);
+  --color-big-stone-500: oklch(0.625 0.156 246.6);
+  --color-big-stone-600: oklch(0.533 0.148 250.2);
+  --color-big-stone-700: oklch(0.457 0.126 250.5);
+  --color-big-stone-800: oklch(0.407 0.104 249.0);
+  --color-big-stone-900: oklch(0.363 0.088 249.4);
+  --color-big-stone-950: oklch(0.260 0.060 251.3);
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,6 +56,370 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+/* Semantic Color Classes */
+@layer utilities {
+    .bg-base-tertiary-hover:hover {
+      @apply bg-gray-400;
+    }
+
+    .bg-base-tertiary {
+      @apply bg-gray-300;
+    }
+
+    .bg-base-hover:hover {
+      @apply bg-gray-100;
+    }
+
+    .bg-base {
+      @apply bg-white;
+    }
+
+    .bg-base-secondary-hover:hover {
+      @apply bg-gray-200;
+    }
+
+    .bg-base-secondary {
+      @apply bg-gray-100;
+    }
+
+    .bg-neutral-secondary-hover:hover {
+      @apply bg-slate-400;
+    }
+
+    .bg-neutral-secondary {
+      @apply bg-slate-300;
+    }
+
+    .bg-neutral-tertiary-hover:hover {
+      @apply bg-slate-200;
+    }
+
+    .bg-neutral-tertiary {
+      @apply bg-slate-50;
+    }
+
+    .bg-neutral-hover:hover {
+      @apply bg-slate-800;
+    }
+
+    .bg-neutral {
+      @apply bg-slate-700;
+    }
+
+    .bg-brand-hover:hover {
+      @apply bg-brand-700;
+    }
+
+    .bg-brand {
+      @apply bg-brand-600;
+    }
+
+    .bg-brand-secondary-hover:hover {
+      @apply bg-brand-300;
+    }
+
+    .bg-brand-secondary {
+      @apply bg-brand-200;
+    }
+
+    .bg-brand-tertiary-hover:hover {
+      @apply bg-brand-100;
+    }
+
+    .bg-brand-tertiary {
+      @apply bg-brand-50;
+    }
+
+    .bg-positive-hover:hover {
+      @apply bg-green-600;
+    }
+
+    .bg-positive {
+      @apply bg-green-500;
+    }
+
+    .bg-positive-secondary-hover:hover {
+      @apply bg-green-300;
+    }
+
+    .bg-positive-secondary {
+      @apply bg-green-200;
+    }
+
+    .bg-positive-tertiary-hover:hover {
+      @apply bg-green-100;
+    }
+
+    .bg-positive-tertiary {
+      @apply bg-green-50;
+    }
+
+    .bg-warning-hover:hover {
+      @apply bg-amber-600;
+    }
+
+    .bg-warning {
+      @apply bg-amber-500;
+    }
+
+    .bg-warning-secondary-hover:hover {
+      @apply bg-amber-300;
+    }
+
+    .bg-warning-secondary {
+      @apply bg-amber-200;
+    }
+
+    .bg-warning-tertiary-hover:hover {
+      @apply bg-amber-100;
+    }
+
+    .bg-warning-tertiary {
+      @apply bg-amber-50;
+    }
+
+    .bg-danger-hover:hover {
+      @apply bg-red-600;
+    }
+
+    .bg-danger {
+      @apply bg-red-500;
+    }
+
+    .bg-danger-secondary-hover:hover {
+      @apply bg-red-300;
+    }
+
+    .bg-danger-secondary {
+      @apply bg-red-200;
+    }
+
+    .bg-danger-tertiary-hover:hover {
+      @apply bg-red-100;
+    }
+
+    .bg-danger-tertiary {
+      @apply bg-red-50;
+    }
+
+    .text-default-primary {
+      @apply text-gray-900;
+    }
+
+    .text-default-secondary {
+      @apply text-gray-500;
+    }
+
+    .text-default-tertiary {
+      @apply text-gray-400;
+    }
+
+    .text-neutral-primary {
+      @apply text-slate-900;
+    }
+
+    .text-neutral-secondary {
+      @apply text-slate-600;
+    }
+
+    .text-neutral-tertiary {
+      @apply text-slate-400;
+    }
+
+    .text-brand-primary {
+      @apply text-brand-600;
+    }
+
+    .text-brand-secondary {
+      @apply text-brand-400;
+    }
+
+    .text-brand-tertiary {
+      @apply text-brand-300;
+    }
+
+    .text-positive-primary {
+      @apply text-green-800;
+    }
+
+    .text-positive-secondary {
+      @apply text-green-600;
+    }
+
+    .text-positive-tertiary {
+      @apply text-green-500;
+    }
+
+    .text-warning-primary {
+      @apply text-amber-900;
+    }
+
+    .text-warning-secondary {
+      @apply text-amber-700;
+    }
+
+    .text-warning-tertiary {
+      @apply text-amber-600;
+    }
+
+    .text-danger-primary {
+      @apply text-red-700;
+    }
+
+    .text-danger-secondary {
+      @apply text-red-600;
+    }
+
+    .text-danger-tertiary {
+      @apply text-red-500;
+    }
+
+    .border-default {
+      @apply border-gray-200;
+    }
+
+    .border-default-secondary {
+      @apply border-gray-400;
+    }
+
+    .border-default-tertiary {
+      @apply border-gray-600;
+    }
+
+    .border-neutral {
+      @apply border-slate-900;
+    }
+
+    .border-neutral-secondary {
+      @apply border-slate-600;
+    }
+
+    .border-neutral-tertiary {
+      @apply border-slate-300;
+    }
+
+    .border-brand {
+      @apply border-brand-500;
+    }
+
+    .border-brand-secondary {
+      @apply border-brand-400;
+    }
+
+    .border-brand-tertiary {
+      @apply border-brand-200;
+    }
+
+    .border-positive {
+      @apply border-green-800;
+    }
+
+    .border-positive-secondary {
+      @apply border-green-600;
+    }
+
+    .border-positive-tertiary {
+      @apply border-green-300;
+    }
+
+    .border-warning {
+      @apply border-amber-900;
+    }
+
+    .border-warning-secondary {
+      @apply border-amber-700;
+    }
+
+    .border-warning-tertiary {
+      @apply border-amber-200;
+    }
+
+    .border-danger {
+      @apply border-red-700;
+    }
+
+    .border-danger-secondary {
+      @apply border-red-600;
+    }
+
+    .border-danger-tertiary {
+      @apply border-red-300;
+    }
+
+    .text-inverse-primary {
+      @apply text-white;
+    }
+
+    .text-inverse-secondary {
+      @apply text-gray-200;
+    }
+
+    .text-inverse-tertiary {
+      @apply text-gray-300;
+    }
+
+  .font-display {
+    @apply font-sans font-bold text-7xl leading-tight tracking-tighter;
+  }
+
+  .font-title {
+    @apply font-sans font-bold text-5xl leading-tight tracking-tighter;
+  }
+
+  .font-title-small {
+    @apply font-sans font-bold text-3xl leading-snug tracking-tighter;
+  }
+
+  .font-subtitle {
+    @apply font-sans font-semibold text-2xl leading-snug tracking-tighter;
+  }
+
+  .font-subtitle-small {
+    @apply font-sans font-medium text-lg leading-normal tracking-tighter;
+  }
+
+  .font-body-large {
+    @apply font-sans font-normal text-lg leading-normal;
+  }
+
+  .font-body-regular {
+    @apply font-sans font-normal text-base leading-relaxed;
+  }
+
+  .font-body-small {
+    @apply font-sans font-normal text-sm leading-relaxed;
+  }
+
+  .font-input {
+    @apply font-sans font-normal text-base leading-relaxed;
+  }
+
+  .font-label {
+    @apply font-sans font-normal text-sm leading-relaxed;
+  }
+
+  .font-caption {
+    @apply font-sans font-normal text-xs leading-relaxed;
+  }
+
+  .font-code {
+    @apply font-mono font-normal text-base leading-relaxed;
+  }
+
+  .font-button {
+    @apply font-sans font-semibold text-sm leading-relaxed;
+  }
+
+  /* test comment */
+  .cats {
+      @apply text-red-300;
+    }
+
+  /* .test-custom {
+      @apply text-blue-500;
+    }  */
 }
 
 body {
