@@ -1,0 +1,127 @@
+
+# Design Token and Class Usage Rules for UI Creation
+
+## 1. Semantic Variables
+- **Always use semantic CSS variables** (e.g., `--color-brand`) in code and class mappings when available
+- Match Figma variables to custom web syntax to ensure alignment with codebase variables
+- Reference the semantic colors defined in [globals.css](mdc:src/app/globals.css)
+- Use the color tokens synced from Figma via [figma-colors.json](mdc:tools/figma-colors.json)
+
+## 2. Semantic Utility Classes
+- **Prefer semantic utility classes** over primitives (e.g., `bg-blue-500`)
+- **CRITICAL RULE**: Utility classes must always include everything after `--color-*` from the CSS variable name in [globals.css]
+
+### Universal CSS Variable to Utility Class Pattern
+**Rule**: `[utility-prefix]-[everything-after-color-]`
+
+**Examples from [globals.css](mdc:src/app/globals.css):**
+- `--color-dander` → `bg-danger`, `border-danger`
+- `--color-brand` → `bg-brand`, `border-brand`
+- `--color-brand-hover` → `hover:bg-brand-hover`
+- `--color-border-tertiary` → `border-border-tertiary`
+- `--color-text-primary` → `text-text-primary`
+- `--color-text-inverse-primary` → `text-text-inverse-primary`
+- `--color-background-secondary` → `bg-background-secondary`
+- `--color-background-secondary-hover` → `hover:bg-background-secondary-hover`
+
+### Utility Prefixes by Context
+- **Background**: `bg-` + [everything after --color-]
+  - `--color-brand` → `bg-brand`
+  - `--color-background-secondary` → `bg-background-secondary`
+- **Text**: `text-` + [everything after --color-]
+  - `--color-text-primary` → `text-text-primary`
+  - `--color-text-warning-secondary` → `text-text-warning-secondary`
+- **Border**: `border-` + [everything after --color-]
+  - `--color-border` → `border-border`
+  - `--color-border-tertiary` → `border-border-tertiary`
+  - `--color-brand` → `border-brand`
+  - `--color-neutral-tertiary` → `border-neutral-tertiary`
+
+### Common Mistakes to Avoid
+- ❌ `border-tertiary` (missing `border-` from variable name)
+- ✅ `border-border-tertiary` (includes full variable name after `--color-`)
+- ❌ `text-primary` (missing `text-` from variable name)  
+- ✅ `text-text-primary` (includes full variable name after `--color-`)
+
+## 2.1. Typography and Font Classes
+- **CRITICAL RULE**: Always apply Figma font styles from [globals.css](mdc:src/app/globals.css) semantic classes first
+- **Available semantic font classes**: `font-display`, `font-title`, `font-title-small`, `font-subtitle`, `font-subtitle-small`, `font-body-large`, `font-body-regular`, `font-body-small`, `font-input`, `font-label`, `font-caption`, `font-code`, `font-button`, `font-button-small`
+- **Fallback strategy**: If no semantic font class exists, use Tailwind primitive utility classes
+- **Priority order**:
+  1. **Figma semantic font classes** (e.g., `font-button`, `font-button-small`)
+  2. **Tailwind primitive classes** (e.g., `text-sm font-medium`) only if semantic class doesn't exist
+  3. **Custom font definitions** only for new patterns not covered above
+
+### Typography Class Usage Examples
+- Button components → `font-button` or `font-button-small`
+- Display text → `font-display`
+- Body text → `font-body-regular` or `font-body-small`
+- Form inputs → `font-input`
+- Labels → `font-label`
+
+## 2.2. Figma Code Conversion Strategy
+When using Figma MCP `get_code`, the output will contain:
+1. **Semantic variables in `get_variable_defs`** - Use these for mapping
+2. **Primitive hex classes** - Convert these to semantic classes
+3. **Primitive spacing/sizing classes** - Keep these if they align with design system
+
+### Conversion Process
+1. **Always run `get_variable_defs`** first to see available semantic variables
+2. **Map hex values to semantic variables**:
+   - `bg-[#4e36f5]` + `var(--color-brand): #4e36f5` → `bg-brand`
+   - `text-[#ffffff]` + `var(--color-text-inverse-primary): #ffffff` → `text-text-inverse-primary`
+3. **Keep primitive spacing/sizing** if they match your design system:
+   - `rounded-md`, `gap-2`, `px-4`, `py-2.5` ✅
+4. **Convert only color classes** to semantic equivalents
+5. **Apply semantic font classes** from globals.css for typography
+
+### Priority Order
+1. **Semantic color classes** (converted from Figma hex → your CSS variables)
+2. **Semantic font classes** (from globals.css)
+3. **Primitive spacing/sizing** (if consistent with design system)
+4. **Fallback to custom values** only if no semantic equivalent exists
+
+## 3. Fallback Strategy
+- If a semantic class is not present in [globals.css](mdc:src/app/globals.css) or Tailwind config, fall back to the nearest primitive Tailwind utility
+- Document any fallbacks used for future semantic class creation
+
+## 4. Component Props and Variants
+- For Figma components with variants/properties, create equivalent React props (e.g., `variant`, `size`, `state`)
+- Wire these props to semantic utility classes using libraries like `class-variance-authority`
+- Follow the pattern established in existing UI components like [Button](mdc:src/components/ui/button.tsx)
+
+## 5. Class/Variable Mapping
+- **Always map Figma layer/variable names to code as closely as possible**
+- Seek clarification if a match isn't obvious
+- Use the sync scripts to maintain alignment:
+  - [sync-figma-colors.js](mdc:scripts/sync-figma-colors.js)
+  - [sync-figma-fonts.js](mdc:scripts/sync-figma-fonts.js)
+
+## 6. Custom Semantic Classes
+- Only use custom semantic classes (via `@apply`) if:
+  - Instructed by explicit documentation
+  - They already exist in the codebase
+  - Creating a new semantic pattern that will be reused
+- Document new semantic classes for team awareness
+
+## 7. Review & Refactor Guidelines
+- **Output code should be reviewed** to ensure all tokens, classes, and props are mapped semantically wherever possible
+- Verify hover states use the `hover:` prefix with semantic classes
+- Ensure dark mode variants are properly implemented
+- Check that focus states and accessibility attributes are included
+
+## 8. Typography and Font Integration
+- Use Figma font style names when referencing designs
+- Leverage synced font tokens from [figma-fonts.json](mdc:tools/figma-fonts.json)
+- Create semantic typography classes (e.g., `display`, `title`, `subtitle`) that map to TailwindCSS utilities
+
+## 9. Color System Integration
+- Use the `--color-` prefix semantic color system for proper TailwindCSS utility generation
+- Leverage automatic hover variant generation (e.g., `hover:bg-brand-hover`)
+- Follow the `bg-*` naming convention instead of `background-*` for variables
+- Use uniform hover naming: `bg-*-default-hover`
+
+## 10. Build Process
+- Run `npm run build:colors` to sync Figma colors to CSS
+- Ensure the sync process only adds or updates tokens, never deletes existing content
+- Test components with both light and dark themes

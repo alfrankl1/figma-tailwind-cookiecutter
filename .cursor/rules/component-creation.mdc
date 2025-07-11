@@ -1,0 +1,101 @@
+
+# Component Creation Rules (shadcn + Figma MCP)
+
+**Note**: This rule works in conjunction with [ui-design-tokens.mdc](mdc:.cursor/rules/ui-design-tokens.mdc) for comprehensive UI component development.
+
+## 1. Base Component Usage
+- **Always start from shadcn/ui components** when they exist for the intended component type
+- Never start a new implementation from scratch if a shadcn version is available in [src/components/ui/](mdc:src/components/ui/)
+- Use existing components like [Button](mdc:src/components/ui/button.tsx), [Badge](mdc:src/components/ui/badge.tsx), [Card](mdc:src/components/ui/card.tsx), or [Input](mdc:src/components/ui/input.tsx) as base references
+- Extend shadcn components rather than replacing them entirely
+
+## 1.1. Component Creation Workflow
+- **CRITICAL RULE**: Create the pure shadcn component first with standard variants and patterns
+- **Then assess the Figma component** against the shadcn base to determine what needs to be modified
+- This ensures we maintain shadcn standards while adapting to design requirements
+- Ask for further clarification after initial assessment if needed
+
+## 2. Variant and Property Mapping
+- **Compare all variants/properties** in the Figma component with those in the shadcn component
+- **Direct mapping**: If a Figma variant/property matches an existing shadcn variant/property, map directly—do not create unnecessary new variants
+- **New variants**: If a new variant/property appears in Figma but does not exist in shadcn, **STOP and ask the user for confirmation** before proceeding
+- **Unused variants**: If there are variants/properties in shadcn not present in Figma, **ask the user whether to keep or remove them**
+- Use `class-variance-authority` (cva) for variant management, following the pattern in [button.tsx](mdc:src/components/ui/button.tsx)
+
+## 2.1. Naming Conventions
+- **CRITICAL RULE**: Convert all variant and property names to conventional lowercase naming
+- Figma variant names like "Destructive" should become "destructive"
+- Figma variant names like "Primary Button" should become "primary"
+- Use kebab-case for multi-word variants: "Secondary Button" → "secondary-button" → "secondary"
+- Maintain consistency with standard shadcn naming patterns
+
+## 3. Semantic Utility Class Replacement
+- **Replace ALL utility classes** in the shadcn component with semantic utility classes from [globals.css](mdc:src/app/globals.css) wherever possible
+- Follow Figma design tokens and naming conventions from [figma-colors.json](mdc:tools/figma-colors.json)
+- Only use Tailwind primitive classes if a matching semantic class does not exist
+- Document any primitive fallbacks for future semantic class creation
+- Maintain the same visual appearance while using semantic classes
+
+## 4. Theme Handling
+- **Assume dark theme support is handled globally**—do not add any `dark:*` classes or theme-specific logic unless explicitly instructed
+- Focus on semantic classes that automatically handle theming through CSS variables
+- Remove existing `dark:*` classes from shadcn components when replacing with semantic alternatives
+- Trust that the semantic color system handles theme variations
+
+## 5. Component Structure and Props
+- **Preserve the component interface** from shadcn (props, exports, etc.) unless Figma requires changes
+- Use TypeScript interfaces that match both shadcn patterns and Figma component properties
+- Maintain `asChild` prop pattern where applicable for composition
+- Keep `className` prop for external styling overrides
+- Follow the `data-slot` attribute pattern for consistent component identification
+
+## 6. User Confirmation for Ambiguity
+- **ALWAYS ask for clarification** when encountering:
+  - Variant/property naming conflicts between Figma and shadcn
+  - Uncertain semantic class mappings
+  - Unclear visual specifications in Figma
+  - Decisions about keeping or removing shadcn-specific features
+- Provide clear options and reasoning for each decision point
+- Do not make assumptions about design intent
+
+## 7. Quality Assurance
+- **Verify component functionality** matches both shadcn behavior and Figma design
+- Ensure all interactive states (hover, focus, disabled) are properly implemented with semantic classes
+- Test that the component works with existing shadcn component composition patterns
+- Validate that the component follows accessibility standards from the original shadcn implementation
+
+### Figma-to-Code Validation Checklist
+- ✅ **All hex colors converted** to semantic classes (no `bg-[#...]` remaining)
+- ✅ **Variable mappings verified** using `get_variable_defs` cross-reference
+- ✅ **Spacing/sizing preserved** from Figma (unless conflicts with design system)
+- ✅ **shadcn patterns maintained** (cva structure, prop interfaces, accessibility)
+- ✅ **All variants tested** to ensure visual match with Figma design
+
+## 8. Figma MCP Integration Workflow
+When using Figma MCP to align with designs:
+
+### Step 1: Gather Figma Data
+1. **Run `get_variable_defs`** to see all semantic variables
+2. **Run `get_code`** to see generated component structure
+3. **Cross-reference** hex values with semantic variables
+
+### Step 2: Code Conversion Strategy
+1. **Colors**: Always convert hex values to semantic classes
+   - `bg-[#4e36f5]` → `bg-brand` (using variable mapping)
+   - `text-[#ffffff]` → `text-text-inverse-primary`
+2. **Spacing/Sizing**: Keep Figma primitives if they align with design system
+   - `rounded-md`, `gap-2`, `px-4` ✅ (standard Tailwind)
+   - `py-2.5` ✅ (if consistent with your sizing scale)
+3. **Layout**: Use Figma's flexbox patterns as reference for shadcn structure
+
+### Step 3: Integration with shadcn
+- **Start with shadcn base** (never replace entirely) when there is an equivalent component
+- **Apply Figma spacing/sizing** to shadcn variants
+- **Convert all Figma colors** to your semantic system
+- **Maintain shadcn's accessibility and interaction patterns**
+
+## 9. Documentation and Export
+- **Maintain shadcn export patterns** (`export { ComponentName, componentVariants }`)
+- Document any deviations from standard shadcn patterns in code comments
+- Note any Figma-specific customizations for future reference
+- Ensure component can be imported and used following shadcn conventions

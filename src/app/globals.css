@@ -36,6 +36,19 @@
   --color-brand-900: oklch(0.352 0.157 279.2);
   --color-brand-950: oklch(0.252 0.101 282.6);
 
+  /* Vermillion Colors */
+  --color-vermillion-50: oklch(0.975 0.016 64.7);
+  --color-vermillion-100: oklch(0.946 0.038 67.3);
+  --color-vermillion-200: oklch(0.888 0.077 64.0);
+  --color-vermillion-300: oklch(0.816 0.125 58.5);
+  --color-vermillion-400: oklch(0.735 0.176 48.5);
+  --color-vermillion-500: oklch(0.685 0.211 40.3);
+  --color-vermillion-600: oklch(0.658 0.231 35.0);
+  --color-vermillion-700: oklch(0.551 0.200 33.5);
+  --color-vermillion-800: oklch(0.465 0.165 32.7);
+  --color-vermillion-900: oklch(0.404 0.135 33.5);
+  --color-vermillion-950: oklch(0.262 0.088 32.6);
+
   /* Semantic Colors - Light Theme */
   /* Background */
   --color-background-tertiary: var(--color-gray-300);
@@ -46,9 +59,9 @@
   --color-background-hover: var(--color-gray-100);
 
   /* Border */
-  --color-border: var(--color-slate-900);
-  --color-border-secondary: var(--color-slate-600);
-  --color-border-tertiary: var(--color-slate-300);
+  --color-border: var(--color-slate-100);
+  --color-border-secondary: var(--color-slate-300);
+  --color-border-tertiary: var(--color-slate-600);
 
   /* Brand */
   --color-brand: var(--color-brand-600);
@@ -125,9 +138,9 @@
   --color-background-hover: var(--color-gray-800);
 
   /* Border */
-  --color-border: var(--color-slate-100);
+  --color-border: var(--color-slate-900);
   --color-border-secondary: var(--color-slate-500);
-  --color-border-tertiary: var(--color-slate-600);
+  --color-border-tertiary: var(--color-slate-400);
 
   /* Brand */
   --color-brand: var(--color-brand-400);
@@ -243,7 +256,11 @@
   }
 
   .font-button {
-    @apply font-sans font-semibold text-sm leading-relaxed;
+    @apply font-sans font-medium text-sm leading-relaxed;
+  }
+
+  .font-button-small {
+    @apply font-sans font-medium text-xs leading-relaxed;
   }
 
   /* test comment */

@@ -217,16 +217,16 @@
          "dark":"#d1d5dc"
       },
       "border-default":{
-         "light":"#0f172b",
-         "dark":"#f1f5f9"
+         "light":"#f1f5f9",
+         "dark":"#0f172b"
       },
       "border-secondary":{
-         "light":"#45556c",
+         "light":"#cad5e2",
          "dark":"#62748e"
       },
       "border-tertiary":{
-         "light":"#cad5e2",
-         "dark":"#45556c"
+         "light":"#45556c",
+         "dark":"#90a1b9"
       },
       "text-inverse-primary":{
          "light":"#ffffff",
@@ -307,6 +307,39 @@
       },
       "color-big-stone-950":{
          "default":"#0a2540"
+      },
+      "color-vermillion-50":{
+         "default":"#fff5ec"
+      },
+      "color-vermillion-100":{
+         "default":"#ffe9d3"
+      },
+      "color-vermillion-200":{
+         "default":"#ffd0a5"
+      },
+      "color-vermillion-300":{
+         "default":"#ffae6d"
+      },
+      "color-vermillion-400":{
+         "default":"#ff8132"
+      },
+      "color-vermillion-500":{
+         "default":"#ff5d0a"
+      },
+      "color-vermillion-600":{
+         "default":"#ff4300"
+      },
+      "color-vermillion-700":{
+         "default":"#cc2d02"
+      },
+      "color-vermillion-800":{
+         "default":"#a1240b"
+      },
+      "color-vermillion-900":{
+         "default":"#82210c"
+      },
+      "color-vermillion-950":{
+         "default":"#460d04"
       }
    }
 }

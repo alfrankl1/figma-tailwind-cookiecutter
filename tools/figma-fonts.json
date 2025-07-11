@@ -1,148 +1,159 @@
 {
-    "fileName": "Design System",
-    "textStyles": [
-      {
-        "name": "Display",
-        "fontFamily": "Mukta",
-        "fontWeight": "Bold",
-        "fontSize": 72,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": -0.800000011920929
-        },
-        "textCase": "ORIGINAL"
+  "fileName": "Design System",
+  "textStyles": [
+    {
+      "name": "Display",
+      "fontFamily": "Mukta",
+      "fontWeight": "Bold",
+      "fontSize": 72,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.800000011920929
       },
-      {
-        "name": "Title",
-        "fontFamily": "Mukta",
-        "fontWeight": "Bold",
-        "fontSize": 48,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": -0.4000000059604645
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Title",
+      "fontFamily": "Mukta",
+      "fontWeight": "Bold",
+      "fontSize": 48,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.4000000059604645
       },
-      {
-        "name": "Title Small",
-        "fontFamily": "Mukta",
-        "fontWeight": "Bold",
-        "fontSize": 30,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": -0.4000000059604645
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Title Small",
+      "fontFamily": "Mukta",
+      "fontWeight": "Bold",
+      "fontSize": 30,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.4000000059604645
       },
-      {
-        "name": "Subtitle",
-        "fontFamily": "Mukta",
-        "fontWeight": "SemiBold",
-        "fontSize": 24,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": -0.4000000059604645
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Subtitle",
+      "fontFamily": "Mukta",
+      "fontWeight": "SemiBold",
+      "fontSize": 24,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.4000000059604645
       },
-      {
-        "name": "Subtitle Small",
-        "fontFamily": "Mukta",
-        "fontWeight": "Medium",
-        "fontSize": 18,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": -0.4000000059604645
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Subtitle Small",
+      "fontFamily": "Mukta",
+      "fontWeight": "Medium",
+      "fontSize": 18,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.4000000059604645
       },
-      {
-        "name": "Body Large",
-        "fontFamily": "Mukta",
-        "fontWeight": "Regular",
-        "fontSize": 18,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": 0
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body Large",
+      "fontFamily": "Mukta",
+      "fontWeight": "Regular",
+      "fontSize": 18,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
       },
-      {
-        "name": "Body Regular",
-        "fontFamily": "Mukta",
-        "fontWeight": "Regular",
-        "fontSize": 16,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": 0
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body Regular",
+      "fontFamily": "Mukta",
+      "fontWeight": "Regular",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
       },
-      {
-        "name": "Body Small",
-        "fontFamily": "Mukta",
-        "fontWeight": "Regular",
-        "fontSize": 14,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": 0
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body Small",
+      "fontFamily": "Mukta",
+      "fontWeight": "Regular",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
       },
-      {
-        "name": "Input",
-        "fontFamily": "Mukta",
-        "fontWeight": "Regular",
-        "fontSize": 16,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": 0
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Input",
+      "fontFamily": "Mukta",
+      "fontWeight": "Regular",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
       },
-      {
-        "name": "Label",
-        "fontFamily": "Mukta",
-        "fontWeight": "Regular",
-        "fontSize": 14,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": 0
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Label",
+      "fontFamily": "Mukta",
+      "fontWeight": "Regular",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
       },
-      {
-        "name": "Caption",
-        "fontFamily": "Mukta",
-        "fontWeight": "Regular",
-        "fontSize": 12,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": 0
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Caption",
+      "fontFamily": "Mukta",
+      "fontWeight": "Regular",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
       },
-      {
-        "name": "Code",
-        "fontFamily": "Menlo",
-        "fontWeight": "Regular",
-        "fontSize": 16,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": 0
-        },
-        "textCase": "ORIGINAL"
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Code",
+      "fontFamily": "Menlo",
+      "fontWeight": "Regular",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
       },
-      {
-        "name": "Button",
-        "fontFamily": "Mukta",
-        "fontWeight": "SemiBold",
-        "fontSize": 14,
-        "letterSpacing": {
-          "unit": "PIXELS",
-          "value": 0
-        },
-        "textCase": "ORIGINAL"
-      }
-    ]
-  }
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Button",
+      "fontFamily": "Mukta",
+      "fontWeight": "Medium",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Button Small",
+      "fontFamily": "Mukta",
+      "fontWeight": "Medium",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    }
+  ]
+}
