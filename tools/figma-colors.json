@@ -217,8 +217,8 @@
          "dark":"#d1d5dc"
       },
       "border-default":{
-         "light":"#f1f5f9",
-         "dark":"#0f172b"
+         "light":"#e2e8f0",
+         "dark":"#314158"
       },
       "border-secondary":{
          "light":"#cad5e2",

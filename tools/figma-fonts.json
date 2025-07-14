@@ -93,7 +93,7 @@
       "name": "Input",
       "fontFamily": "Mukta",
       "fontWeight": "Regular",
-      "fontSize": 16,
+      "fontSize": 14,
       "letterSpacing": {
         "unit": "PIXELS",
         "value": 0
@@ -149,6 +149,17 @@
       "fontFamily": "Mukta",
       "fontWeight": "Medium",
       "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Label Bold",
+      "fontFamily": "Mukta",
+      "fontWeight": "Medium",
+      "fontSize": 14,
       "letterSpacing": {
         "unit": "PIXELS",
         "value": 0

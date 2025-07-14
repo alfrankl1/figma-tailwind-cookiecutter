@@ -50,6 +50,7 @@
   --color-vermillion-950: oklch(0.262 0.088 32.6);
 
   /* Semantic Colors - Light Theme */
+  
   /* Background */
   --color-background-tertiary: var(--color-gray-300);
   --color-background-secondary-hover: var(--color-gray-200);
@@ -59,7 +60,7 @@
   --color-background-hover: var(--color-gray-100);
 
   /* Border */
-  --color-border: var(--color-slate-100);
+  --color-border: var(--color-slate-200);
   --color-border-secondary: var(--color-slate-300);
   --color-border-tertiary: var(--color-slate-600);
 
@@ -138,7 +139,7 @@
   --color-background-hover: var(--color-gray-800);
 
   /* Border */
-  --color-border: var(--color-slate-900);
+  --color-border: var(--color-slate-700);
   --color-border-secondary: var(--color-slate-500);
   --color-border-tertiary: var(--color-slate-400);
 
@@ -240,15 +241,15 @@
   }
 
   .font-input {
-    @apply font-sans font-normal text-base leading-relaxed;
-  }
-
-  .font-label {
     @apply font-sans font-normal text-sm leading-relaxed;
   }
 
+  .font-label {
+    @apply font-sans font-normal text-sm leading-none;
+  }
+
   .font-caption {
-    @apply font-sans font-normal text-xs leading-relaxed;
+    @apply font-sans font-normal text-xs leading-none;
   }
 
   .font-code {
@@ -256,21 +257,16 @@
   }
 
   .font-button {
-    @apply font-sans font-medium text-sm leading-relaxed;
+    @apply font-sans font-medium text-sm leading-none;
   }
 
   .font-button-small {
-    @apply font-sans font-medium text-xs leading-relaxed;
+    @apply font-sans font-medium text-xs leading-none;
   }
 
-  /* test comment */
-  .cats {
-      @apply text-red-300;
-    }
-
-  /* .test-custom {
-      @apply text-blue-500;
-    }  */
+  .font-label-bold {
+    @apply font-sans font-medium text-sm leading-none;
+  }
 }
 
 body {
