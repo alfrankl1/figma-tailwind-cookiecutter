@@ -43,7 +43,7 @@ Visit `http://localhost:3000` (or `3003` if 3000 is in use) to see your design s
 ## 🎨 Figma Integration
 
 ### Design System Setup
-1. **Get the Figma Community File** - [Link coming soon] - A complete design system template
+1. **Get the Figma Community File** - [Figma Community File](https://www.figma.com/community/file/1526688065982358612) - A complete design system template
 2. **Customize Your Tokens** - Modify colors, typography, and spacing in Figma
 3. **Export Variables** - Use Figma's design token export feature
 4. **Sync to Code** - Run the sync scripts to update your CSS
