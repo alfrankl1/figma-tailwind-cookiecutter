@@ -2,13 +2,9 @@
 
 > **The missing link between Figma design systems and production-ready code.**
 
-Finally, a starter template that keeps your Figma designs and code perfectly aligned. No more "it doesn't look like the design" - build pixel-perfect UIs with automated design token synchronization.
+You can find amazing design systems on Figma Community and tons of code boilerplates, but nothing that truly connects them. Designers create beautiful, systematic designs in Figma, then developers rebuild them from scratch in code, losing consistency and wasting time.
 
-## 🎯 Why This Exists
-
-**The Problem**: You can find amazing design systems on Figma Community and tons of code boilerplates, but nothing that truly connects them. Designers create beautiful, systematic designs in Figma, then developers rebuild them from scratch in code, losing consistency and wasting time.
-
-**The Solution**: This boilerplate automatically syncs your Figma design tokens with your codebase, creating a seamless workflow from design to production.
+This boilerplate automatically syncs your Figma design tokens with your codebase, creating a seamless workflow from design to production.
 
 ## ✨ Key Features
 
@@ -61,21 +57,6 @@ npm run build:colors
 npm run build:fonts
 ```
 
-## 📁 Project Structure
-
-```
-├── src/
-│   ├── components/ui/          # shadcn components (customized)
-│   ├── app/globals.css         # Design tokens & Tailwind config
-│   └── app/                    # Next.js app directory
-├── scripts/
-│   ├── sync-figma-colors.js    # Color token sync script
-│   └── sync-figma-fonts.js     # Typography sync script
-├── tools/
-│   ├── figma-colors.json       # Exported color tokens
-│   └── figma-fonts.json        # Exported typography tokens
-└── .cursor/rules/              # AI coding rules for consistency
-```
 
 ## 🎯 Design System Philosophy
 
@@ -124,19 +105,6 @@ Font styles match Figma exactly with fallbacks:
 ## 🔮 Roadmap
 
 - [ ] **Component Library Expansion** - More shadcn components with Figma alignment
-- [ ] **Advanced Token Support** - Spacing, borders, shadows, and more
-- [ ] **Figma Plugin** - Direct sync from Figma interface
-- [ ] **Design System Documentation** - Auto-generated component docs
-- [ ] **Theme Variants** - Support for brand variations and white-labeling
-
-## 📚 Examples
-
-Check out the included Button component to see the full integration in action:
-- All shadcn variants maintained
-- Figma color tokens applied
-- Typography styles from design system
-- Phosphor icons matching Figma names
-- Perfect hover states and interactions
 
 ## 🤝 Contributing
 
@@ -152,4 +120,4 @@ MIT License - build amazing things!
 
 ---
 
-**Ready to eliminate design-code friction forever?** Star this repo and let's build the future of design-development collaboration.
+**Eliminate design-code friction forever?** Star this repo and let's build the future of design-development collaboration.
