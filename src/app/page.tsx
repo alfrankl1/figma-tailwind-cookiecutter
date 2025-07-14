@@ -1,77 +1,65 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Palette, Heart, Star, Sun, Moon } from "phosphor-react"
+import { useState, useEffect } from "react"
+import { Palette, Heart, Download, Plus, ArrowRight, Sun, Moon, Trash, Lock, MagnifyingGlass } from "phosphor-react"
+import { Input } from "@/components/ui/input"
+import { InputCompact } from "@/components/ui/inputCompact"
 
 export default function Home() {
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isDark, setIsDark] = useState(false)
 
-  // Check system preference and apply theme
   useEffect(() => {
-    // Check system preference on mount
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    setIsDarkMode(prefersDark)
+    // Check for saved theme preference or default to system preference
+    const savedTheme = localStorage.getItem('theme')
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     
-    // Apply initial theme
-    if (prefersDark) {
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+      setIsDark(true)
       document.documentElement.classList.add('dark')
     }
   }, [])
 
-  // Apply/remove dark class when theme changes
-  useEffect(() => {
-    if (isDarkMode) {
+  const toggleTheme = () => {
+    const newTheme = !isDark
+    setIsDark(newTheme)
+    
+    if (newTheme) {
       document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
     } else {
       document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
     }
-  }, [isDarkMode])
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode)
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-6xl mx-auto space-y-12">
-        {/* Header with Theme Toggle */}
-        <div className="flex justify-between items-center">
-          <h1 className="font-title mb-8 text-text-primary">Button Component Demo</h1>
-          <Button 
-            onClick={toggleTheme}
+    <div className="min-h-screen p-8 pb-20 font-body-regular">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="font-title text-text-primary mb-2">
+              Button Component Showcase
+            </h1>
+            <p className="font-body-regular text-text-secondary">
+              shadcn Button component with Figma design integration
+            </p>
+          </div>
+          
+          <Button
             variant="outline"
-            icon={isDarkMode ? Sun : Moon}
-            iconPosition="left"
-            className="mb-8"
+            size="sm"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
           >
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            {isDark ? <Sun /> : <Moon />}
           </Button>
         </div>
 
-        {/* Debug Info */}
-        <section className="bg-background-secondary p-4 rounded-lg border border-border">
-          <h3 className="font-subtitle mb-2 text-text-primary">Debug Info</h3>
-          <p className="font-body-small text-text-secondary">
-            Current state: <strong>{isDarkMode ? 'Dark' : 'Light'}</strong>
-          </p>
-          <p className="font-body-small text-text-secondary">
-            Document classes: <strong>{typeof window !== 'undefined' ? document.documentElement.className : 'Loading...'}</strong>
-          </p>
-        </section>
-
-        {/* Theme Info */}
-        <section className="bg-background-secondary p-6 rounded-lg border border-border">
-          <h2 className="font-subtitle mb-2 text-text-primary">Current Theme</h2>
-          <p className="font-body-regular text-text-secondary">
-            Currently using <strong>{isDarkMode ? 'Dark' : 'Light'}</strong> mode. 
-            All components automatically adapt using semantic color variables.
-          </p>
-        </section>
-
-        {/* Button Variants */}
-        <section>
-          <h2 className="font-subtitle mb-4 text-text-primary">Button Variants</h2>
+        {/* All Variants */}
+        <section className="mb-12">
+          <h2 className="font-subtitle text-text-primary mb-6">All Variants</h2>
           <div className="flex flex-wrap gap-4">
             <Button variant="default">Default</Button>
             <Button variant="destructive">Destructive</Button>
@@ -82,88 +70,98 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Button Sizes */}
-        <section>
-          <h2 className="font-subtitle mb-4 text-text-primary">Button Sizes</h2>
-          <div className="flex flex-wrap items-end gap-4">
+        {/* All Sizes */}
+        <section className="mb-12">
+          <h2 className="font-subtitle text-text-primary mb-6">All Sizes</h2>
+          <div className="flex flex-wrap items-center gap-4">
             <Button size="sm">Small</Button>
             <Button size="default">Default</Button>
             <Button size="lg">Large</Button>
-            <Button size="icon"><Palette /></Button>
           </div>
         </section>
 
-        {/* Buttons with Icons */}
-        <section>
-          <h2 className="font-subtitle mb-4 text-text-primary">Buttons with Icons</h2>
+        {/* Icons with Text */}
+        <section className="mb-12">
+          <h2 className="font-subtitle text-text-primary mb-6">Icons with Text</h2>
           <div className="space-y-4">
             <div className="flex flex-wrap gap-4">
-              <Button icon={Heart} iconPosition="left">Like</Button>
-              <Button icon={Star} iconPosition="right" variant="outline">Favorite</Button>
-              <Button icon={Palette} variant="secondary">Design</Button>
-            </div>
-            
-            <div className="flex flex-wrap gap-4">
-              <Button icon={Heart} iconPosition="left" size="sm">Small Like</Button>
-              <Button icon={Star} iconPosition="right" variant="outline" size="lg">Large Favorite</Button>
+              <Button><Heart />Save</Button>
+              <Button><Download />Download</Button>
+              <Button>Add Item<Plus /></Button>
+              <Button>Continue<ArrowRight /></Button>
             </div>
           </div>
         </section>
 
         {/* Icon Only Buttons */}
-        <section>
-          <h2 className="font-subtitle mb-4 text-text-primary">Icon Only Buttons</h2>
-          <div className="flex flex-wrap gap-4">
-            <Button size="icon" variant="default"><Palette /></Button>
-            <Button size="icon" variant="outline"><Heart /></Button>
-            <Button size="icon" variant="secondary"><Star /></Button>
-            <Button size="icon" variant="ghost"><Palette /></Button>
-            <Button size="icon" variant="destructive"><Heart /></Button>
+        <section className="mb-12">
+          <h2 className="font-subtitle text-text-primary mb-6">Icon Only Buttons</h2>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button size="sm"><Palette /></Button>
+            <Button size="default"><Palette /></Button>
+            <Button size="lg"><Palette /></Button>
           </div>
         </section>
 
-        {/* Custom Icons */}
-        <section>
-          <h2 className="font-subtitle mb-4 text-text-primary">Custom Icons (Different Sizes)</h2>
-          <div className="flex flex-wrap gap-4">
-            <Button size="icon" icon={Heart} />
-            <Button size="icon" icon={Star} variant="outline" />
-            <Button size="icon" icon={Palette} variant="secondary" />
+
+        {/* Interactive Examples */}
+        <section className="mb-12">
+          <h2 className="font-subtitle text-text-primary mb-6">Interactive Examples</h2>
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-4">
+              <Button onClick={() => alert('Clicked!')}>
+                <Palette />
+                Click Me
+              </Button>
+              <Button variant="outline" disabled>
+                <Download />
+                Disabled
+              </Button>
+              <Button variant="destructive">
+                Delete
+                <Trash />
+              </Button>
+            </div>
           </div>
         </section>
 
-        {/* States Demo */}
-        <section>
-          <h2 className="font-subtitle mb-4 text-text-primary">Button States</h2>
-          <div className="flex flex-wrap gap-4">
-            <Button>Normal</Button>
-            <Button disabled>Disabled</Button>
-            <Button variant="outline">Normal Outline</Button>
-            <Button variant="outline" disabled>Disabled Outline</Button>
+        {/* Input Examples */}
+        <section className="mb-12">
+          <h2 className="font-subtitle text-text-primary mb-6">Input Examples</h2>
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-4">
+            <Input label="Email" placeholder="Enter your email" />
+
+            <Input variant="file" label="Upload file" />
+
+            <Input 
+              placeholder="Password"
+              icon={Lock}
+              type="password"
+              error={true} 
+              description="Password is required" 
+            />
+            </div>
           </div>
         </section>
 
-        {/* Theme Demonstration */}
-        <section className="bg-background-tertiary p-6 rounded-lg">
-          <h2 className="font-subtitle mb-4 text-text-primary">Theme Demonstration</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-brand hover:bg-brand-hover p-4 rounded transition-colors">
-              <p className="font-label text-text-inverse-primary">Brand Colors</p>
-            </div>
-            <div className="bg-positive hover:bg-positive-hover p-4 rounded transition-colors">
-              <p className="font-label text-text-inverse-primary">Positive</p>
-            </div>
-            <div className="bg-warning hover:bg-warning-hover p-4 rounded transition-colors">
-              <p className="font-label text-text-inverse-primary">Warning</p>
-            </div>
-            <div className="bg-danger hover:bg-danger-hover p-4 rounded transition-colors">
-              <p className="font-label text-text-inverse-primary">Danger</p>
+        {/* Compact Input Examples */}
+        <section className="mb-12">
+          <h2 className="font-subtitle text-text-primary mb-6">Compact Input Examples</h2>
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-4">
+              {/* Default */}
+              <InputCompact placeholder="Search..." />
+              {/* With icon explicitly set */}
+              <InputCompact placeholder="Search with icon" icon={MagnifyingGlass} />
+              {/* Error state */}
+              <InputCompact placeholder="Error state" error={true} />
+              {/* Filled state (simulate by passing defaultValue and state) */}
+              <InputCompact defaultValue="Filled value" state="filled" />
             </div>
           </div>
-          <p className="font-body-small text-text-secondary mt-4">
-            Toggle between light and dark modes to see how all semantic colors automatically adapt.
-          </p>
         </section>
+
       </div>
     </div>
   )
