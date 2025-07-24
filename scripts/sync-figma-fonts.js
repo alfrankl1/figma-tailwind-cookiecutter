@@ -131,64 +131,53 @@ console.log('\n📝 Step 2: Analyzing existing CSS...');
 const cssPath = path.join(__dirname, '../src/app/globals.css');
 let fileContent = fs.readFileSync(cssPath, 'utf8');
 
-// Step 3: Add Google Fonts import if not present
-if (!fileContent.includes('@import url(\'https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Mukta:wght@200;300;400;500;600;700;800&display=swap\');')) {
-  fileContent = `@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');\n@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=DM+Serif+Text:ital@0;1&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');\n\n${fileContent}`;
-}
-
-// Step 4: Update theme block with font families
-const themeBlockRegex = /@theme inline \{([^}]*)\}/;
+// Step 2: Parse all --font-* variables in the @theme block
+const themeBlockRegex = /@theme\s+(inline\s+)?\{([\s\S]*?)\}/m;
 const themeMatch = fileContent.match(themeBlockRegex);
-
+let fontVarMap = {};
 if (themeMatch) {
-  let themeContent = themeMatch[1];
-  
-  // Update font-sans definition
-  if (themeContent.includes('--font-sans: var(--font-geist-sans)')) {
-    themeContent = themeContent.replace(
-      '--font-sans: var(--font-geist-sans)',
-      '--font-sans: "Mukta", ui-sans-serif, system-ui, sans-serif'
-    );
-  } else if (!themeContent.includes('--font-sans: "Mukta"')) {
-    // Find the right place to insert font-sans
-    const foregroundIndex = themeContent.indexOf('--color-foreground:');
-    if (foregroundIndex !== -1) {
-      const lineEnd = themeContent.indexOf(';', foregroundIndex) + 1;
-      const insertPoint = themeContent.indexOf('\n', lineEnd) + 1;
-      themeContent = themeContent.slice(0, insertPoint) + 
-        '  --font-sans: "Mukta", ui-sans-serif, system-ui, sans-serif;\n' + 
-        themeContent.slice(insertPoint);
-    }
+  const themeContent = themeMatch[2]; // Use index 2 since we added a capture group
+  // Match all --font-* variables
+  const fontVarRegex = /--font-([a-zA-Z0-9_-]+):\s*([^;]+);/g;
+  let match;
+  while ((match = fontVarRegex.exec(themeContent)) !== null) {
+    const varName = match[1].trim();
+    const varValue = match[2].replace(/['"]/g, '').trim(); // Remove quotes for easier matching
+    fontVarMap[varName] = varValue;
   }
-  
-  // Add font-serif if not present
-  if (!themeContent.includes('--font-serif:')) {
-    const fontSansIndex = themeContent.indexOf('--font-sans:');
-    if (fontSansIndex !== -1) {
-      const lineEnd = themeContent.indexOf(';', fontSansIndex) + 1;
-      const insertPoint = themeContent.indexOf('\n', lineEnd) + 1;
-      themeContent = themeContent.slice(0, insertPoint) + 
-        '  --font-serif: "Bree Serif", ui-serif, Georgia, serif;\n' + 
-        themeContent.slice(insertPoint);
-    }
-  }
-  
-  const newThemeBlock = `@theme inline {${themeContent}}`;
-  fileContent = fileContent.replace(themeBlockRegex, newThemeBlock);
 }
 
+// Helper: Find the best matching font variable for a given fontFamily
+function getFontClassForFamily(fontFamily) {
+  // Try to find a font variable whose value contains the fontFamily
+  for (const [varName, varValue] of Object.entries(fontVarMap)) {
+    // Only match on the first font in the stack
+    const firstFont = varValue.split(',')[0].trim();
+    if (firstFont.toLowerCase() === fontFamily.toLowerCase()) {
+      return `font-${varName}`;
+    }
+  }
+  // Fallback to font-sans if no match
+  return 'font-sans';
+}
+
+// Step 3: Generate semantic font classes
 console.log('📝 Step 3: Generating semantic font classes...');
-
-// Step 5: Generate font utilities
 const fontUtilities = [];
-
-for (const [styleName, utilities] of Object.entries(processedFonts)) {
-  fontUtilities.push(`  .${styleName} {`);
-  fontUtilities.push(`    @apply ${utilities};`);
-  fontUtilities.push(`  }`);
+for (const [styleName, fontStyle] of Object.entries(processedFonts)) {
+  // fontStyle here is the Tailwind utility string, but we want to replace the font-* utility with the correct semantic class
+  // Get the Figma fontFamily for this style
+  const figmaStyle = figmaFonts.textStyles.find(s => 'font-' + s.name.toLowerCase().replace(/\s+/g, '-') === styleName);
+  let fontClass = 'font-sans';
+  if (figmaStyle) {
+    fontClass = getFontClassForFamily(figmaStyle.fontFamily);
+  }
+  // Replace the font-* utility in the string with the correct semantic class
+  const updatedUtilities = fontStyle.replace(/font-(sans|serif|mono)/, fontClass);
+  fontUtilities.push(`  .${styleName} {\n    @apply ${updatedUtilities};\n  }`);
 }
 
-// Step 7: Update utilities block
+// Step 5: Update utilities block
 const utilitiesRegex = /(@layer utilities \{)([\s\S]*?)(\n\})/;
 const utilitiesMatch = fileContent.match(utilitiesRegex);
 
@@ -249,12 +238,8 @@ if (utilitiesMatch) {
   }
   
   // Add font classes
-  const fontClassesContent = [];
-  for (const [styleName, utilities] of Object.entries(processedFonts)) {
-    fontClassesContent.push(`  .${styleName} {\n    @apply ${utilities};\n  }`);
-  }
-  if (fontClassesContent.length > 0) {
-    newUtilitiesContent.push(fontClassesContent.join('\n\n'));
+  if (fontUtilities.length > 0) {
+    newUtilitiesContent.push(fontUtilities.join('\n\n'));
   }
   
   // Add custom classes
@@ -278,9 +263,8 @@ console.log(`📁 Updated: ${cssPath}`);
 
 console.log('\n📊 Summary:');
 console.log(`   • ${Object.keys(processedFonts).length} semantic font classes processed`);
-console.log('   • Font families added to @theme block');
-console.log('   • Google Fonts imports added');
+console.log('   • Font classes use semantic variables from @theme');
 console.log('   • All font classes use @apply directive');
-console.log('   • Custom font classes preserved with warnings');
+console.log('   • Custom font classes preserved');
 
 console.log('\n🚀 Ready to use semantic font classes in your components!'); 

@@ -3,7 +3,7 @@
   "textStyles": [
     {
       "name": "Display",
-      "fontFamily": "Mukta",
+      "fontFamily": "Cabin",
       "fontWeight": "Bold",
       "fontSize": 72,
       "letterSpacing": {
@@ -14,7 +14,7 @@
     },
     {
       "name": "Title",
-      "fontFamily": "Mukta",
+      "fontFamily": "Cabin",
       "fontWeight": "Bold",
       "fontSize": 48,
       "letterSpacing": {
@@ -25,7 +25,7 @@
     },
     {
       "name": "Title Small",
-      "fontFamily": "Mukta",
+      "fontFamily": "Cabin",
       "fontWeight": "Bold",
       "fontSize": 30,
       "letterSpacing": {
@@ -36,7 +36,7 @@
     },
     {
       "name": "Subtitle",
-      "fontFamily": "Mukta",
+      "fontFamily": "Cabin",
       "fontWeight": "SemiBold",
       "fontSize": 24,
       "letterSpacing": {
@@ -47,7 +47,7 @@
     },
     {
       "name": "Subtitle Small",
-      "fontFamily": "Mukta",
+      "fontFamily": "Cabin",
       "fontWeight": "Medium",
       "fontSize": 18,
       "letterSpacing": {
@@ -124,7 +124,7 @@
     },
     {
       "name": "Code",
-      "fontFamily": "Menlo",
+      "fontFamily": "Space Mono",
       "fontWeight": "Regular",
       "fontSize": 16,
       "letterSpacing": {

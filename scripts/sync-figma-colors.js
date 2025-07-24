@@ -136,14 +136,16 @@ if (firstThemeIndex !== -1) {
 // Extract existing theme block content to preserve custom variables
 let existingCustomColors = '';
 let existingPrimitiveColors = {};
+let existingFontVariables = '';
 
-// Extract existing @theme block content to preserve manually added colors
+// Extract existing @theme block content to preserve manually added colors AND font variables
 const existingPrimitiveThemeRegex = /@theme\s*\{([\s\S]*?)\}/;
 const existingPrimitiveThemeMatch = existingCSS.match(existingPrimitiveThemeRegex);
 
 if (existingPrimitiveThemeMatch) {
   const themeContent = existingPrimitiveThemeMatch[1];
   const lines = themeContent.split('\n');
+  let fontLines = [];
   
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -151,6 +153,17 @@ if (existingPrimitiveThemeMatch) {
     
     // Skip empty lines and comments
     if (!trimmedLine || trimmedLine.startsWith('/*')) {
+      // Preserve font-related comments
+      if (trimmedLine.includes('Font') || line.includes('Font')) {
+        fontLines.push(line);
+      }
+      continue;
+    }
+    
+    // Extract font variables and preserve them
+    const fontVarMatch = line.match(/--font-([a-zA-Z0-9_-]+):/);
+    if (fontVarMatch) {
+      fontLines.push(line);
       continue;
     }
     
@@ -163,6 +176,10 @@ if (existingPrimitiveThemeMatch) {
       }
       existingPrimitiveColors[baseName][shade] = value.trim();
     }
+  }
+  
+  if (fontLines.length > 0) {
+    existingFontVariables = fontLines.join('\n') + '\n';
   }
 }
 
@@ -302,6 +319,18 @@ if (existingThemeMatch) {
       continue;
     }
     
+    // Skip any color variables (should only be in main @theme block)
+    const colorVarMatch = line.match(/--color-([a-zA-Z0-9_-]+):/);
+    if (colorVarMatch) {
+      continue;
+    }
+    
+    // Skip font variables (should only be in main @theme block)
+    const fontVarMatch = line.match(/--font-([a-zA-Z0-9_-]+):/);
+    if (fontVarMatch) {
+      continue;
+    }
+    
     // If we hit a non-semantic variable, stop skipping
     if (trimmedLine.startsWith('--') && !semanticVarMatch) {
       skipSemanticSection = false;
@@ -384,10 +413,26 @@ Object.entries(allColorGroups)
 
 // Build main theme block with both primitives AND semantic colors for utility class generation
 let mainThemeBlock = '';
-const themeContent = figmaThemeBlock.trimEnd() + (figmaThemeBlock && semanticLightBlock ? '\n\n' : '') + (semanticLightBlock || '');
-if (themeContent.trim()) {
+let allThemeContent = '';
+
+// Add font variables first (if they exist)
+if (existingFontVariables.trim()) {
+  allThemeContent += existingFontVariables;
+}
+
+// Add primitive colors
+if (figmaThemeBlock.trim()) {
+  allThemeContent += (allThemeContent ? '\n' : '') + figmaThemeBlock;
+}
+
+// Add semantic colors
+if (semanticLightBlock.trim()) {
+  allThemeContent += (allThemeContent ? '\n' : '') + semanticLightBlock;
+}
+
+if (allThemeContent.trim()) {
   mainThemeBlock = `@theme {
-${themeContent.trimEnd()}
+${allThemeContent.trimEnd()}
 }`;
 }
 

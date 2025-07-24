@@ -1,6 +1,15 @@
+/* 
+ * Update to your font
+ * Use @import if using Google Fonts or similar service
+ * Use @font-face if using a local font (see tailwindcss docs)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap'); /* Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap'); /* Optional alternative Heading font */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap'); /* Serif font */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap'); /* Mono font */
+
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=DM+Serif+Text:ital@0;1&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
 
 /* 
  * Up to date with TailwindCSS 4.1
@@ -10,6 +19,12 @@
  */
 
 @theme {
+  /* Font Variables */
+  --font-sans: "Mukta", sans-serif; /* Change to your imported font-family */
+  --font-serif: "DM Serif Text", serif; /* Change to your imported font-family */
+  --font-mono: "Space Mono", monospace; /* Change to your imported font-family */
+  --font-heading: "Cabin", sans-serif; /* Change to your imported font-family or change to var(--font-sans) if only using one font-family */
+
   /* Big-stone Colors */
   --color-big-stone-50: oklch(0.976 0.011 243.7);
   --color-big-stone-100: oklch(0.946 0.024 248.1);
@@ -49,8 +64,8 @@
   --color-vermillion-900: oklch(0.404 0.135 33.5);
   --color-vermillion-950: oklch(0.262 0.088 32.6);
 
+
   /* Semantic Colors - Light Theme */
-  
   /* Background */
   --color-background-tertiary: var(--color-gray-300);
   --color-background-secondary-hover: var(--color-gray-200);
@@ -209,23 +224,23 @@
 
 @layer utilities {
   .font-display {
-    @apply font-sans font-bold text-7xl leading-tight tracking-tighter;
+    @apply font-heading font-bold text-7xl leading-tight tracking-tighter;
   }
 
   .font-title {
-    @apply font-sans font-bold text-5xl leading-tight tracking-tighter;
+    @apply font-heading font-bold text-5xl leading-tight tracking-tighter;
   }
 
   .font-title-small {
-    @apply font-sans font-bold text-3xl leading-snug tracking-tighter;
+    @apply font-heading font-bold text-3xl leading-snug tracking-tighter;
   }
 
   .font-subtitle {
-    @apply font-sans font-semibold text-2xl leading-snug tracking-tighter;
+    @apply font-heading font-semibold text-2xl leading-snug tracking-tighter;
   }
 
   .font-subtitle-small {
-    @apply font-sans font-medium text-lg leading-normal tracking-tighter;
+    @apply font-heading font-medium text-lg leading-normal tracking-tighter;
   }
 
   .font-body-large {
@@ -245,11 +260,11 @@
   }
 
   .font-label {
-    @apply font-sans font-normal text-sm leading-none;
+    @apply font-sans font-normal text-sm leading-relaxed;
   }
 
   .font-caption {
-    @apply font-sans font-normal text-xs leading-none;
+    @apply font-sans font-normal text-xs leading-relaxed;
   }
 
   .font-code {
@@ -257,15 +272,15 @@
   }
 
   .font-button {
-    @apply font-sans font-medium text-sm leading-none;
+    @apply font-sans font-medium text-sm leading-relaxed;
   }
 
   .font-button-small {
-    @apply font-sans font-medium text-xs leading-none;
+    @apply font-sans font-medium text-xs leading-relaxed;
   }
 
   .font-label-bold {
-    @apply font-sans font-medium text-sm leading-none;
+    @apply font-sans font-medium text-sm leading-relaxed;
   }
 }
 
