@@ -24,6 +24,12 @@ This boilerplate automatically syncs your Figma design tokens with your codebase
 - **Phosphor Icons** - Icon system aligned with Figma designs
 - **TypeScript** - Type safety throughout
 
+## 📋 Prerequisites
+
+- **Node.js 18+** - Required for Next.js 15
+- **npm** - Package manager (comes with Node.js)
+- **Figma account** - For design token exports (optional for basic usage)
+
 ## 🚀 Quick Start
 
 ```bash

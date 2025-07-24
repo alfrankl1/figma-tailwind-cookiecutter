@@ -186,7 +186,7 @@ if (existingPrimitiveThemeMatch) {
 console.log('📝 Step 1: Processing custom color primitives...');
 
 // --- Process utility classes (custom primitives) ---
-const utilityClasses = figmaColors['utility-classes-custom'] || {};
+const utilityClasses = figmaColors['custom-primitive-classes'] || {};
 const colorGroups = {};
 
 // Generate semantic CSS variables that reference primitive colors
@@ -222,7 +222,7 @@ Object.entries(colorGroups).forEach(([baseName, shades]) => {
 console.log('📝 Step 2: Processing semantic colors...');
 
 // --- Process semantic colors ---
-const semanticColors = figmaColors['semantic-colors'] || {};
+const semanticColors = figmaColors['semantic-classes'] || {};
 
 Object.entries(semanticColors).forEach(([semanticName, colorData]) => {
   // Transform color names according to naming convention
