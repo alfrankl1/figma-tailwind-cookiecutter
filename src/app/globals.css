@@ -224,23 +224,31 @@
 
 @layer utilities {
   .font-display {
-    @apply font-heading font-bold text-7xl leading-tight tracking-tighter;
+    @apply font-heading font-medium text-5xl leading-tight tracking-tighter;
+  }
+
+  .font-title-large {
+    @apply font-heading font-bold text-4xl leading-snug tracking-tighter;
   }
 
   .font-title {
-    @apply font-heading font-bold text-5xl leading-tight tracking-tighter;
+    @apply font-heading font-medium text-3xl leading-snug tracking-tighter;
   }
 
   .font-title-small {
-    @apply font-heading font-bold text-3xl leading-snug tracking-tighter;
+    @apply font-heading font-medium text-xl leading-normal;
+  }
+
+  .font-subtitle-large {
+    @apply font-heading font-semibold text-lg leading-normal;
   }
 
   .font-subtitle {
-    @apply font-heading font-semibold text-2xl leading-snug tracking-tighter;
+    @apply font-heading font-semibold text-base leading-relaxed;
   }
 
   .font-subtitle-small {
-    @apply font-heading font-medium text-lg leading-normal tracking-tighter;
+    @apply font-heading font-semibold text-sm leading-relaxed;
   }
 
   .font-body-large {
@@ -263,6 +271,10 @@
     @apply font-sans font-normal text-sm leading-relaxed;
   }
 
+  .font-label-bold {
+    @apply font-sans font-medium text-sm leading-relaxed;
+  }
+
   .font-caption {
     @apply font-sans font-normal text-xs leading-relaxed;
   }
@@ -272,15 +284,11 @@
   }
 
   .font-button {
-    @apply font-sans font-medium text-sm leading-relaxed;
+    @apply font-heading font-medium text-sm leading-relaxed;
   }
 
   .font-button-small {
-    @apply font-sans font-medium text-xs leading-relaxed;
-  }
-
-  .font-label-bold {
-    @apply font-sans font-medium text-sm leading-relaxed;
+    @apply font-heading font-medium text-xs leading-relaxed;
   }
 }
 

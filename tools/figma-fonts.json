@@ -1,11 +1,11 @@
 {
-  "fileName": "Design System",
+  "fileName": "Design System Master",
   "textStyles": [
     {
       "name": "Display",
       "fontFamily": "Cabin",
-      "fontWeight": "Bold",
-      "fontSize": 72,
+      "fontWeight": "Medium",
+      "fontSize": 48,
       "letterSpacing": {
         "unit": "PIXELS",
         "value": -0.800000011920929
@@ -13,10 +13,21 @@
       "textCase": "ORIGINAL"
     },
     {
-      "name": "Title",
+      "name": "Title Large",
       "fontFamily": "Cabin",
       "fontWeight": "Bold",
-      "fontSize": 48,
+      "fontSize": 36,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.4000000059604645
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Title",
+      "fontFamily": "Cabin",
+      "fontWeight": "Medium",
+      "fontSize": 30,
       "letterSpacing": {
         "unit": "PIXELS",
         "value": -0.4000000059604645
@@ -26,11 +37,22 @@
     {
       "name": "Title Small",
       "fontFamily": "Cabin",
-      "fontWeight": "Bold",
-      "fontSize": 30,
+      "fontWeight": "Medium",
+      "fontSize": 20,
       "letterSpacing": {
         "unit": "PIXELS",
-        "value": -0.4000000059604645
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Subtitle Large",
+      "fontFamily": "Cabin",
+      "fontWeight": "SemiBold",
+      "fontSize": 18,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
       },
       "textCase": "ORIGINAL"
     },
@@ -38,21 +60,21 @@
       "name": "Subtitle",
       "fontFamily": "Cabin",
       "fontWeight": "SemiBold",
-      "fontSize": 24,
+      "fontSize": 16,
       "letterSpacing": {
         "unit": "PIXELS",
-        "value": -0.4000000059604645
+        "value": 0
       },
       "textCase": "ORIGINAL"
     },
     {
       "name": "Subtitle Small",
       "fontFamily": "Cabin",
-      "fontWeight": "Medium",
-      "fontSize": 18,
+      "fontWeight": "SemiBold",
+      "fontSize": 14,
       "letterSpacing": {
         "unit": "PIXELS",
-        "value": -0.4000000059604645
+        "value": 0
       },
       "textCase": "ORIGINAL"
     },
@@ -112,6 +134,17 @@
       "textCase": "ORIGINAL"
     },
     {
+      "name": "Label Bold",
+      "fontFamily": "Mukta",
+      "fontWeight": "Medium",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
       "name": "Caption",
       "fontFamily": "Mukta",
       "fontWeight": "Regular",
@@ -135,7 +168,7 @@
     },
     {
       "name": "Button",
-      "fontFamily": "Mukta",
+      "fontFamily": "Cabin",
       "fontWeight": "Medium",
       "fontSize": 14,
       "letterSpacing": {
@@ -146,20 +179,9 @@
     },
     {
       "name": "Button Small",
-      "fontFamily": "Mukta",
+      "fontFamily": "Cabin",
       "fontWeight": "Medium",
       "fontSize": 12,
-      "letterSpacing": {
-        "unit": "PIXELS",
-        "value": 0
-      },
-      "textCase": "ORIGINAL"
-    },
-    {
-      "name": "Label Bold",
-      "fontFamily": "Mukta",
-      "fontWeight": "Medium",
-      "fontSize": 14,
       "letterSpacing": {
         "unit": "PIXELS",
         "value": 0
