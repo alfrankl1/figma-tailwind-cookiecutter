@@ -1,0 +1,22 @@
+---
+description: When referncing an icon from a Figma design
+alwaysApply: false
+---
+
+# Icon Usage Rule
+
+- When referencing an icon from a Figma design, use the `data-name` attribute in the Figma node to determine the icon name.
+- Use [Phosphor Icons](https://phosphoricons.com/) by default for all icons.
+- The icon component name in code should match the Figma `data-name` exactly (e.g., `ChartBar`, `Palette`).
+- Always allow the displayed icon to be changeable via a prop or similar mechanism.
+- Example:
+  ```tsx
+  import { ChartBar } from "phosphor-react";
+  // ...
+  <ChartBar />
+  ```
+- If a Figma icon does not exist in Phosphor, use a fallback or custom SVG, but prefer Phosphor whenever possible.
+description:
+globs:
+alwaysApply: false
+---
