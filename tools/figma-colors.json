@@ -1,0 +1,11 @@
+// Example Figma Colors JSON structure:
+// {
+//   "custom-primitive-classes": {
+//     "color-brand-800": { "default": "#3725ae" },
+//     ...
+//   },
+//   "semantic-classes": {
+//     "text-neutral-primary": { "light": "#0f172b", "dark": "#e2e8f0" },
+//     ...
+//   }
+// }
