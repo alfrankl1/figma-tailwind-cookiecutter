@@ -8,8 +8,16 @@ import { InputCompact } from "@/components/ui/inputCompact"
 
 export default function Home() {
   const [isDark, setIsDark] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // Set mounted to true after component mounts on client
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
+    if (!mounted) return // Don't run theme logic until mounted
+    
     // Check for saved theme preference or default to system preference
     const savedTheme = localStorage.getItem('theme')
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -18,7 +26,7 @@ export default function Home() {
       setIsDark(true)
       document.documentElement.classList.add('dark')
     }
-  }, [])
+  }, [mounted])
 
   const toggleTheme = () => {
     const newTheme = !isDark
@@ -40,10 +48,10 @@ export default function Home() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="font-title text-text-primary mb-2">
-              Button Component Showcase
+              Component Showcase
             </h1>
             <p className="font-body-regular text-text-secondary">
-              shadcn Button component with Figma design integration
+              Components, built on shadcn/ui then customized
             </p>
           </div>
           
@@ -53,7 +61,7 @@ export default function Home() {
             onClick={toggleTheme}
             aria-label="Toggle theme"
           >
-            {isDark ? <Sun /> : <Moon />}
+            {mounted ? (isDark ? <Sun /> : <Moon />) : <div className="w-4 h-4" />}
           </Button>
         </div>
 
@@ -96,10 +104,24 @@ export default function Home() {
         {/* Icon Only Buttons */}
         <section className="mb-12">
           <h2 className="font-subtitle text-text-primary mb-6">Icon Only Buttons</h2>
-          <div className="flex flex-wrap items-center gap-4">
-            <Button size="sm"><Palette /></Button>
-            <Button size="default"><Palette /></Button>
-            <Button size="lg"><Palette /></Button>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-subtitle-small text-text-secondary mb-3">Icon Sizes</h3>
+              <div className="flex flex-wrap items-center gap-4">
+                <Button size="icon-sm"><Palette weight="fill" /></Button>
+                <Button size="icon-default"><Heart weight="fill" /></Button>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-subtitle-small text-text-secondary mb-3">Different Variants as Icon Buttons</h3>
+              <div className="flex flex-wrap items-center gap-4">
+                <Button variant="ghost" size="icon-default"><Palette weight="fill" /></Button>
+                <Button variant="outline" size="icon-default"><Heart weight="fill" /></Button>
+                <Button variant="secondary" size="icon-default"><Download weight="fill" /></Button>
+                <Button variant="default" size="icon-default"><Plus weight="fill" /></Button>
+                <Button variant="destructive" size="icon-default"><Trash weight="fill" /></Button>
+              </div>
+            </div>
           </div>
         </section>
 

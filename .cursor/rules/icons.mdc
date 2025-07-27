@@ -1,8 +1,7 @@
 ---
-description: When referncing an icon from a Figma design
+description: When referencing an icon from a Figma design
 alwaysApply: false
 ---
-
 # Icon Usage Rule
 
 - When referencing an icon from a Figma design, use the `data-name` attribute in the Figma node to determine the icon name.

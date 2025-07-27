@@ -284,11 +284,11 @@
   }
 
   .font-button {
-    @apply font-heading font-medium text-sm leading-relaxed;
+    @apply font-heading font-medium text-sm leading-4;
   }
 
   .font-button-small {
-    @apply font-heading font-medium text-xs leading-relaxed;
+    @apply font-heading font-medium text-xs leading-3;
   }
 }
 
