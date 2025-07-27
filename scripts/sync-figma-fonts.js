@@ -3,154 +3,104 @@
 const fs = require('fs');
 const path = require('path');
 
-// Read the figma fonts JSON
-const figmaFonts = JSON.parse(fs.readFileSync(path.join(__dirname, '../tools/figma-fonts.json'), 'utf8'));
-
-// Font family mapping
-const fontFamilyMap = {
-  'Mukta': 'font-sans',
-  'Bree Serif': 'font-serif', 
-  'Menlo': 'font-mono'
-};
-
-// Font weight mapping
-const fontWeightMap = {
-  'Regular': 'font-normal',
-  'Medium': 'font-medium',
-  'SemiBold': 'font-semibold',
-  'Bold': 'font-bold',
-  'ExtraBold': 'font-extrabold',
-  'Black': 'font-black',
-  'Light': 'font-light',
-  'ExtraLight': 'font-extralight',
-  'Thin': 'font-thin'
-};
-
-// Tailwind font sizes (in pixels for comparison)
-const tailwindFontSizes = [
-  { size: 12, class: 'text-xs' },
-  { size: 14, class: 'text-sm' },
-  { size: 16, class: 'text-base' },
-  { size: 18, class: 'text-lg' },
-  { size: 20, class: 'text-xl' },
-  { size: 24, class: 'text-2xl' },
-  { size: 30, class: 'text-3xl' },
-  { size: 36, class: 'text-4xl' },
-  { size: 48, class: 'text-5xl' },
-  { size: 60, class: 'text-6xl' },
-  { size: 72, class: 'text-7xl' },
-  { size: 96, class: 'text-8xl' },
-  { size: 128, class: 'text-9xl' }
-];
-
-// Tailwind line heights
-const tailwindLineHeights = [
-  { value: 1, class: 'leading-none' },
-  { value: 1.25, class: 'leading-tight' },
-  { value: 1.375, class: 'leading-snug' },
-  { value: 1.5, class: 'leading-normal' },
-  { value: 1.625, class: 'leading-relaxed' },
-  { value: 2, class: 'leading-loose' }
-];
-
-// Tailwind letter spacing
-const tailwindLetterSpacing = [
-  { value: -0.05, class: 'tracking-tighter' },
-  { value: -0.025, class: 'tracking-tight' },
-  { value: 0, class: 'tracking-normal' },
-  { value: 0.025, class: 'tracking-wide' },
-  { value: 0.05, class: 'tracking-wider' },
-  { value: 0.1, class: 'tracking-widest' }
-];
-
-// Helper function to find closest match
-function findClosestMatch(value, options, key) {
-  return options.reduce((closest, option) => {
-    const diff = Math.abs(value - option[key]);
-    const closestDiff = Math.abs(value - closest[key]);
-    return diff < closestDiff ? option : closest;
-  });
-}
-
-// Convert Figma font style to Tailwind utilities
-function convertFigmaFontToTailwind(fontStyle) {
-  const utilities = [];
-  
-  // Font family
-  const fontFamily = fontFamilyMap[fontStyle.fontFamily] || 'font-sans';
-  utilities.push(fontFamily);
-  
-  // Font weight
-  const fontWeight = fontWeightMap[fontStyle.fontWeight] || 'font-normal';
-  utilities.push(fontWeight);
-  
-  // Font size
-  const fontSize = findClosestMatch(fontStyle.fontSize, tailwindFontSizes, 'size');
-  utilities.push(fontSize.class);
-  
-  // Line height (calculate based on font size since it's not in the JSON)
-  let lineHeight;
-  if (fontStyle.fontSize >= 48) {
-    lineHeight = 'leading-tight';
-  } else if (fontStyle.fontSize >= 24) {
-    lineHeight = 'leading-snug';
-  } else if (fontStyle.fontSize >= 18) {
-    lineHeight = 'leading-normal';
-  } else {
-    lineHeight = 'leading-relaxed';
-  }
-  utilities.push(lineHeight);
-  
-  // Letter spacing
-  const letterSpacingValue = fontStyle.letterSpacing ? fontStyle.letterSpacing.value : 0;
-  const letterSpacing = findClosestMatch(letterSpacingValue, tailwindLetterSpacing, 'value');
-  if (letterSpacing.class !== 'tracking-normal') {
-    utilities.push(letterSpacing.class);
-  }
-  
-  return utilities.join(' ');
-}
-
 console.log('🔤 Syncing Figma fonts to TailwindCSS 4.1...\n');
 
-// Step 1: Process Figma fonts
-console.log('📝 Step 1: Processing Figma text styles...');
-const processedFonts = {};
-
-// Process the textStyles array
-figmaFonts.textStyles.forEach(textStyle => {
-  const className = 'font-' + textStyle.name.toLowerCase().replace(/\s+/g, '-');
-  const tailwindUtilities = convertFigmaFontToTailwind(textStyle);
-  processedFonts[className] = tailwindUtilities;
-  console.log(`   • ${className}: ${tailwindUtilities}`);
-});
-
-console.log('\n📝 Step 2: Analyzing existing CSS...');
-
-// Read current CSS file
-const cssPath = path.join(__dirname, '../src/app/globals.css');
-let fileContent = fs.readFileSync(cssPath, 'utf8');
-
-// Step 2: Parse all --font-* variables in the @theme block
-const themeBlockRegex = /@theme\s+(inline\s+)?\{([\s\S]*?)\}/m;
-const themeMatch = fileContent.match(themeBlockRegex);
-let fontVarMap = {};
-if (themeMatch) {
-  const themeContent = themeMatch[2]; // Use index 2 since we added a capture group
-  // Match all --font-* variables
-  const fontVarRegex = /--font-([a-zA-Z0-9_-]+):\s*([^;]+);/g;
-  let match;
-  while ((match = fontVarRegex.exec(themeContent)) !== null) {
-    const varName = match[1].trim();
-    const varValue = match[2].replace(/['"]/g, '').trim(); // Remove quotes for easier matching
-    fontVarMap[varName] = varValue;
+// Helper function to parse CSS and extract content from specific blocks
+function parseCSSBlock(cssContent, blockType) {
+  let startPattern;
+  
+  if (blockType === '@theme') {
+    startPattern = /@theme\s*\{/;
+  } else if (blockType === '@layer utilities') {
+    startPattern = /@layer\s+utilities\s*\{/;
+  }
+  
+  console.log(`   • Debug: Parsing ${blockType}`);
+  
+  const startMatch = cssContent.match(startPattern);
+  if (!startMatch) {
+    console.log(`   • Debug: No start pattern found for ${blockType}`);
+    return null;
+  }
+  
+  const startIndex = startMatch.index + startMatch[0].length;
+  let braceCount = 1;
+  let currentIndex = startIndex;
+  
+  // Find the matching closing brace by counting braces
+  while (currentIndex < cssContent.length && braceCount > 0) {
+    const char = cssContent[currentIndex];
+    if (char === '{') {
+      braceCount++;
+    } else if (char === '}') {
+      braceCount--;
+    }
+    currentIndex++;
+  }
+  
+  if (braceCount === 0) {
+    const content = cssContent.substring(startIndex, currentIndex - 1);
+    console.log(`   • Debug: Successfully extracted ${blockType}, content length: ${content.length}`);
+    console.log(`   • Debug: First 100 chars: "${content.substring(0, 100)}"`);
+    return content;
+  } else {
+    console.log(`   • Debug: Unmatched braces for ${blockType}`);
+    return null;
   }
 }
 
-// Helper: Find the best matching font variable for a given fontFamily
-function getFontClassForFamily(fontFamily) {
+// Helper function to extract font variables from @theme block
+function extractFontVariables(themeContent) {
+  const fontVarMap = {};
+  const fontVarRegex = /--font-([a-zA-Z0-9_-]+):\s*([^;]+);/g;
+  let match;
+  
+  while ((match = fontVarRegex.exec(themeContent)) !== null) {
+    const varName = match[1].trim();
+    const varValue = match[2].replace(/['"]/g, '').trim(); // Remove quotes
+    fontVarMap[varName] = varValue;
+  }
+  
+  return fontVarMap;
+}
+
+// Helper function to extract font utilities from @layer utilities block
+function extractFontUtilities(utilitiesContent) {
+  const fontUtilities = {};
+  
+  console.log('   • Debug: extractFontUtilities called with content length:', utilitiesContent.length);
+  
+  // Match font utility classes (including multiline)
+  const fontClassRegex = /\.font-([a-zA-Z0-9_-]+)\s*\{([^}]+)\}/gs;
+  let match;
+  let matchCount = 0;
+  
+  while ((match = fontClassRegex.exec(utilitiesContent)) !== null) {
+    matchCount++;
+    const className = `font-${match[1]}`;
+    const applyRule = match[2].trim();
+    
+    console.log(`   • Debug: Found class ${className}, content: "${applyRule.substring(0, 50)}..."`);
+    
+    // Extract the @apply directive
+    const applyMatch = applyRule.match(/@apply\s+([^;]+);?/s);
+    if (applyMatch) {
+      fontUtilities[className] = applyMatch[1].trim();
+      console.log(`   • Debug: Extracted utility: ${className} = "${applyMatch[1].trim()}"`);
+    } else {
+      console.log(`   • Debug: No @apply found in: "${applyRule}"`);
+    }
+  }
+  
+  console.log(`   • Debug: Total matches found: ${matchCount}`);
+  
+  return fontUtilities;
+}
+
+// Helper function to find semantic font class for a given font family
+function getFontClassForFamily(fontFamily, semanticFontVarMap) {
   // Try to find a font variable whose value contains the fontFamily
-  for (const [varName, varValue] of Object.entries(fontVarMap)) {
+  for (const [varName, varValue] of Object.entries(semanticFontVarMap)) {
     // Only match on the first font in the stack
     const firstFont = varValue.split(',')[0].trim();
     if (firstFont.toLowerCase() === fontFamily.toLowerCase()) {
@@ -161,23 +111,139 @@ function getFontClassForFamily(fontFamily) {
   return 'font-sans';
 }
 
-// Step 3: Generate semantic font classes
-console.log('📝 Step 3: Generating semantic font classes...');
-const fontUtilities = [];
-for (const [styleName, fontStyle] of Object.entries(processedFonts)) {
-  // fontStyle here is the Tailwind utility string, but we want to replace the font-* utility with the correct semantic class
-  // Get the Figma fontFamily for this style
-  const figmaStyle = figmaFonts.textStyles.find(s => 'font-' + s.name.toLowerCase().replace(/\s+/g, '-') === styleName);
-  let fontClass = 'font-sans';
-  if (figmaStyle) {
-    fontClass = getFontClassForFamily(figmaStyle.fontFamily);
-  }
-  // Replace the font-* utility in the string with the correct semantic class
-  const updatedUtilities = fontStyle.replace(/font-(sans|serif|mono)/, fontClass);
-  fontUtilities.push(`  .${styleName} {\n    @apply ${updatedUtilities};\n  }`);
+// Helper function to replace font family in utility string
+function replaceFontFamily(utilityString, newFontClass) {
+  // Replace any font-* class with the new semantic font class
+  return utilityString.replace(/font-[a-zA-Z0-9_-]+/, newFontClass);
 }
 
-// Step 5: Update utilities block
+// Step 1: Read the Figma fonts CSS file
+console.log('📝 Step 1: Reading Figma fonts CSS file...');
+const figmaFontsPath = path.join(__dirname, '../tools/figma-fonts.css');
+
+if (!fs.existsSync(figmaFontsPath)) {
+  console.error(`❌ Error: figma-fonts.css not found at ${figmaFontsPath}`);
+  console.log('Please ensure you have exported your Figma text styles to tools/figma-fonts.css');
+  process.exit(1);
+}
+
+const figmaFontsContent = fs.readFileSync(figmaFontsPath, 'utf8');
+
+// Step 2: Parse the Figma fonts CSS
+console.log('📝 Step 2: Parsing Figma fonts CSS...');
+
+// Extract @theme block from Figma CSS (contains font variable definitions)
+const figmaThemeContent = parseCSSBlock(figmaFontsContent, '@theme');
+const figmaFontVarMap = figmaThemeContent ? extractFontVariables(figmaThemeContent) : {};
+
+// Extract @layer utilities block from Figma CSS (contains font utility classes)
+const figmaUtilitiesContent = parseCSSBlock(figmaFontsContent, '@layer utilities');
+
+// Debug: Show what we extracted
+console.log('   • Debug: @layer utilities content found:', !!figmaUtilitiesContent);
+if (figmaUtilitiesContent) {
+  console.log('   • Debug: First 200 chars of utilities content:', figmaUtilitiesContent.substring(0, 200));
+} else {
+  console.log('   • Debug: Full CSS file preview:');
+  console.log(figmaFontsContent.substring(0, 500));
+}
+
+const figmaFontUtilities = figmaUtilitiesContent ? extractFontUtilities(figmaUtilitiesContent) : {};
+
+console.log(`   • Found ${Object.keys(figmaFontVarMap).length} font variables in Figma CSS`);
+console.log(`   • Found ${Object.keys(figmaFontUtilities).length} font utilities in Figma CSS`);
+
+// Debug: Show what we found
+if (Object.keys(figmaFontVarMap).length > 0) {
+  console.log('   • Figma font variables:');
+  for (const [key, value] of Object.entries(figmaFontVarMap)) {
+    console.log(`     --font-${key}: ${value}`);
+  }
+}
+
+if (Object.keys(figmaFontUtilities).length > 0) {
+  console.log('   • Figma font utilities:');
+  for (const [key, value] of Object.entries(figmaFontUtilities)) {
+    console.log(`     .${key}: ${value}`);
+  }
+}
+
+if (Object.keys(figmaFontUtilities).length === 0) {
+  console.error('❌ No font utilities found in figma-fonts.css');
+  console.log('Please check that your figma-fonts.css file contains @layer utilities with .font-* classes');
+  process.exit(1);
+}
+
+// Step 3: Read and parse the existing globals.css
+console.log('📝 Step 3: Analyzing existing globals.css...');
+
+const cssPath = path.join(__dirname, '../src/app/globals.css');
+let fileContent = fs.readFileSync(cssPath, 'utf8');
+
+// Parse all --font-* variables in the @theme block of globals.css
+const themeBlockRegex = /@theme\s*\{([\s\S]*?)\}/m;
+const themeMatch = fileContent.match(themeBlockRegex);
+let semanticFontVarMap = {};
+
+if (themeMatch) {
+  const themeContent = themeMatch[1];
+  semanticFontVarMap = extractFontVariables(themeContent);
+}
+
+console.log(`   • Found ${Object.keys(semanticFontVarMap).length} semantic font variables in globals.css`);
+
+// Debug: Show semantic font variables
+if (Object.keys(semanticFontVarMap).length > 0) {
+  console.log('   • Semantic font variables:');
+  for (const [key, value] of Object.entries(semanticFontVarMap)) {
+    console.log(`     --font-${key}: ${value}`);
+  }
+}
+
+// Step 4: Convert Figma font utilities to use semantic font families
+console.log('📝 Step 4: Converting to semantic font classes...');
+
+const convertedFontUtilities = [];
+
+for (const [fullClassName, utilityString] of Object.entries(figmaFontUtilities)) {
+  // Extract the font family class from the utility string (e.g., "font-cabin" from the @apply directive)
+  const fontClassMatch = utilityString.match(/font-([a-zA-Z0-9_-]+)/);
+  
+  if (fontClassMatch) {
+    const figmaFontVar = fontClassMatch[1]; // e.g., "cabin"
+    
+    // Look up the actual font family from Figma's @theme block
+    const fontFamily = figmaFontVarMap[figmaFontVar];
+    
+    if (fontFamily) {
+      // Get the first font name from the font stack
+      const firstFont = fontFamily.split(',')[0].trim().replace(/['"]/g, '');
+      
+      // Find the corresponding semantic font class
+      const semanticFontClass = getFontClassForFamily(firstFont, semanticFontVarMap);
+      
+      // Replace the specific font class with the semantic one
+      const updatedUtilityString = replaceFontFamily(utilityString, semanticFontClass);
+      
+      convertedFontUtilities.push(`  .${fullClassName} {\n    @apply ${updatedUtilityString};\n  }`);
+      
+      console.log(`   • ${fullClassName}: font-${figmaFontVar} → ${semanticFontClass} (${firstFont})`);
+    } else {
+      // If we can't find the font family, keep the original but convert to font-sans
+      const updatedUtilityString = replaceFontFamily(utilityString, 'font-sans');
+      convertedFontUtilities.push(`  .${fullClassName} {\n    @apply ${updatedUtilityString};\n  }`);
+      console.log(`   • ${fullClassName}: ${utilityString} → ${updatedUtilityString} (fallback)`);
+    }
+  } else {
+    // If no font class found, add as-is
+    convertedFontUtilities.push(`  .${fullClassName} {\n    @apply ${utilityString};\n  }`);
+    console.log(`   • ${fullClassName}: ${utilityString} (no font family detected)`);
+  }
+}
+
+// Step 5: Update the utilities block in globals.css
+console.log('📝 Step 5: Updating globals.css...');
+
 const utilitiesRegex = /(@layer utilities \{)([\s\S]*?)(\n\})/;
 const utilitiesMatch = fileContent.match(utilitiesRegex);
 
@@ -220,8 +286,8 @@ if (utilitiesMatch) {
       continue;
     }
     
-    // Skip if it's a Figma font class that we're regenerating
-    if (processedFonts[className]) {
+    // Skip if it's a font class that we're regenerating
+    if (className.startsWith('font-') && figmaFontUtilities[className]) {
       continue;
     }
     
@@ -237,9 +303,9 @@ if (utilitiesMatch) {
     newUtilitiesContent.push(colorClasses.map(cls => '  ' + cls).join('\n\n'));
   }
   
-  // Add font classes
-  if (fontUtilities.length > 0) {
-    newUtilitiesContent.push(fontUtilities.join('\n\n'));
+  // Add converted font classes
+  if (convertedFontUtilities.length > 0) {
+    newUtilitiesContent.push(convertedFontUtilities.join('\n\n'));
   }
   
   // Add custom classes
@@ -262,9 +328,9 @@ console.log('\n✅ Font sync complete!');
 console.log(`📁 Updated: ${cssPath}`);
 
 console.log('\n📊 Summary:');
-console.log(`   • ${Object.keys(processedFonts).length} semantic font classes processed`);
-console.log('   • Font classes use semantic variables from @theme');
+console.log(`   • ${Object.keys(figmaFontUtilities).length} font classes processed from figma-fonts.css`);
+console.log('   • Font classes converted to use semantic variables from @theme');
 console.log('   • All font classes use @apply directive');
 console.log('   • Custom font classes preserved');
 
-console.log('\n🚀 Ready to use semantic font classes in your components!'); 
+console.log('\n🚀 Ready to use semantic font classes in your components!');
