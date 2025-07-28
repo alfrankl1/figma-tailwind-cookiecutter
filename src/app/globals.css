@@ -224,71 +224,71 @@
 
 @layer utilities {
   .font-display {
-    @apply font-heading font-medium text-5xl leading-tight tracking-tighter;
+    @apply font-heading text-5xl font-medium leading-tight tracking-tight;
   }
 
   .font-title-large {
-    @apply font-heading font-bold text-4xl leading-snug tracking-tighter;
+    @apply font-heading text-4xl font-bold leading-tight tracking-normal;
   }
 
   .font-title {
-    @apply font-heading font-medium text-3xl leading-snug tracking-tighter;
+    @apply font-heading text-3xl font-medium leading-9 tracking-tight;
   }
 
   .font-title-small {
-    @apply font-heading font-medium text-xl leading-normal;
+    @apply font-heading text-xl font-medium leading-6;
   }
 
   .font-subtitle-large {
-    @apply font-heading font-semibold text-lg leading-normal;
+    @apply font-heading text-lg font-semibold leading-5;
   }
 
   .font-subtitle {
-    @apply font-heading font-semibold text-base leading-relaxed;
+    @apply font-heading text-base font-semibold leading-5;
   }
 
   .font-subtitle-small {
-    @apply font-heading font-semibold text-sm leading-relaxed;
+    @apply font-heading text-sm font-semibold leading-4;
   }
 
   .font-body-large {
-    @apply font-sans font-normal text-lg leading-normal;
+    @apply font-sans text-lg font-normal leading-6;
   }
 
   .font-body-regular {
-    @apply font-sans font-normal text-base leading-relaxed;
+    @apply font-sans text-base font-normal leading-6;
   }
 
   .font-body-small {
-    @apply font-sans font-normal text-sm leading-relaxed;
+    @apply font-sans text-sm font-normal leading-5;
   }
 
   .font-input {
-    @apply font-sans font-normal text-sm leading-relaxed;
+    @apply font-sans text-sm font-normal leading-5;
   }
 
   .font-label {
-    @apply font-sans font-normal text-sm leading-relaxed;
+    @apply font-sans text-sm font-normal leading-3;
   }
 
   .font-label-bold {
-    @apply font-sans font-medium text-sm leading-relaxed;
+    @apply font-sans text-sm font-medium leading-3;
   }
 
   .font-caption {
-    @apply font-sans font-normal text-xs leading-relaxed;
+    @apply font-sans text-xs font-normal leading-3;
   }
 
   .font-code {
-    @apply font-mono font-normal text-base leading-relaxed;
+    @apply font-mono text-base font-normal leading-5;
   }
 
   .font-button {
-    @apply font-heading font-medium text-sm leading-relaxed;
+    @apply font-heading text-sm font-medium leading-4;
   }
 
   .font-button-small {
-    @apply font-heading font-medium text-xs leading-relaxed;
+    @apply font-heading text-xs font-medium leading-3;
   }
 }
 

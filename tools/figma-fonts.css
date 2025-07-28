@@ -1,0 +1,29 @@
+/* figma-fonts.css - Export your text styles from Figma */
+
+/* 
+ * Instructions:
+ * 
+ * 1. Install the "Export Text Styles for TailwindCSS v4" plugin from the Figma community:
+ *    https://www.figma.com/community/plugin/1531407977615884339/export-text-styles-for-tailwindcss-v4
+ * 
+ * 2. In Figma, run the plugin with these settings:
+ *    ✅ Include @theme section
+ *    ✅ Always use Tailwind values  <-- IMPORTANT: This must be enabled!
+ *    Base Font Size: 16px (or match your body font size)
+ * 
+ * 3. Copy the generated CSS and paste here
+ * 
+ * Expected output structure from Figma plugin:
+ * 
+ * @import "tailwindcss";
+ * 
+ * @theme {
+ *   --font-[name]: "[Font Family]", [fallback];
+ * }
+ * 
+ * @layer utilities {
+ *   .font-[style-name] {
+ *     @apply font-[name] text-[size] font-[weight] leading-[height] tracking-[spacing];
+ *   }
+ * }
+ */
