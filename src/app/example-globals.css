@@ -1,0 +1,301 @@
+/* 
+ * Update to your font
+ * Use @import if using Google Fonts or similar service
+ * Use @font-face if using a local font (see tailwindcss docs)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap'); /* Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap'); /* Optional alternative Heading font */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap'); /* Serif font */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap'); /* Mono font */
+
+@import "tailwindcss";
+
+/* 
+ * Up to date with TailwindCSS 4.1
+ * This file is synced with Figma color and font tokens
+ * Run: npm run build:colors to sync colors to @figma-colors.json
+ * Run: npm run build:fonts to sync fonts to @figma-fonts.json
+ */
+
+@theme {
+  /* Font Variables */
+  --font-sans: "Mukta", sans-serif; /* Change to your imported font-family */
+  --font-serif: "DM Serif Text", serif; /* Change to your imported font-family */
+  --font-mono: "Space Mono", monospace; /* Change to your imported font-family */
+  --font-heading: "Cabin", sans-serif; /* Change to your imported font-family or change to var(--font-sans) if only using one font-family */
+
+  /* Big-stone Colors */
+  --color-big-stone-50: oklch(0.976 0.011 243.7);
+  --color-big-stone-100: oklch(0.946 0.024 248.1);
+  --color-big-stone-200: oklch(0.888 0.052 242.2);
+  --color-big-stone-300: oklch(0.797 0.097 241.6);
+  --color-big-stone-400: oklch(0.706 0.139 242.2);
+  --color-big-stone-500: oklch(0.625 0.156 246.6);
+  --color-big-stone-600: oklch(0.533 0.148 250.2);
+  --color-big-stone-700: oklch(0.457 0.126 250.5);
+  --color-big-stone-800: oklch(0.407 0.104 249.0);
+  --color-big-stone-900: oklch(0.363 0.088 249.4);
+  --color-big-stone-950: oklch(0.260 0.060 251.3);
+
+  /* Brand Colors */
+  --color-brand-50: oklch(0.957 0.021 274.0);
+  --color-brand-100: oklch(0.920 0.039 276.0);
+  --color-brand-200: oklch(0.853 0.073 277.1);
+  --color-brand-300: oklch(0.755 0.127 277.5);
+  --color-brand-400: oklch(0.639 0.196 278.3);
+  --color-brand-500: oklch(0.578 0.235 278.3);
+  --color-brand-600: oklch(0.505 0.263 277.0);
+  --color-brand-700: oklch(0.454 0.243 277.1);
+  --color-brand-800: oklch(0.394 0.202 277.7);
+  --color-brand-900: oklch(0.352 0.157 279.2);
+  --color-brand-950: oklch(0.252 0.101 282.6);
+
+  /* Vermillion Colors */
+  --color-vermillion-50: oklch(0.975 0.016 64.7);
+  --color-vermillion-100: oklch(0.946 0.038 67.3);
+  --color-vermillion-200: oklch(0.888 0.077 64.0);
+  --color-vermillion-300: oklch(0.816 0.125 58.5);
+  --color-vermillion-400: oklch(0.735 0.176 48.5);
+  --color-vermillion-500: oklch(0.685 0.211 40.3);
+  --color-vermillion-600: oklch(0.658 0.231 35.0);
+  --color-vermillion-700: oklch(0.551 0.200 33.5);
+  --color-vermillion-800: oklch(0.465 0.165 32.7);
+  --color-vermillion-900: oklch(0.404 0.135 33.5);
+  --color-vermillion-950: oklch(0.262 0.088 32.6);
+
+
+  /* Semantic Colors - Light Theme */
+  /* Background */
+  --color-background-tertiary: var(--color-gray-300);
+  --color-background-secondary: var(--color-gray-100);
+  --color-background: var(--color-white);
+  --color-background-secondary-hover: var(--color-gray-200);
+  --color-background-hover: var(--color-gray-100);
+  --color-background-tertiary-hover: var(--color-gray-400);
+
+  /* Border */
+  --color-border-secondary: var(--color-slate-300);
+  --color-border: var(--color-slate-200);
+  --color-border-tertiary: var(--color-slate-500);
+
+  /* Brand */
+  --color-brand-tertiary: var(--color-brand-50);
+  --color-brand-secondary-hover: var(--color-brand-300);
+  --color-brand-tertiary-hover: var(--color-brand-100);
+  --color-brand: var(--color-brand-600);
+  --color-brand-secondary: var(--color-brand-200);
+  --color-brand-hover: var(--color-brand-700);
+
+  /* Danger */
+  --color-danger-tertiary-hover: var(--color-red-100);
+  --color-danger-secondary-hover: var(--color-red-300);
+  --color-danger-secondary: var(--color-red-200);
+  --color-danger: var(--color-red-500);
+  --color-danger-hover: var(--color-red-600);
+  --color-danger-tertiary: var(--color-red-50);
+
+  /* Neutral */
+  --color-neutral-tertiary-hover: var(--color-slate-200);
+  --color-neutral-secondary-hover: var(--color-slate-400);
+  --color-neutral-hover: var(--color-slate-800);
+  --color-neutral: var(--color-slate-700);
+  --color-neutral-secondary: var(--color-slate-300);
+  --color-neutral-tertiary: var(--color-slate-50);
+
+  /* Positive */
+  --color-positive-tertiary-hover: var(--color-green-100);
+  --color-positive-tertiary: var(--color-green-50);
+  --color-positive-secondary-hover: var(--color-green-300);
+  --color-positive-secondary: var(--color-green-200);
+  --color-positive-hover: var(--color-green-600);
+  --color-positive: var(--color-green-500);
+
+  /* Text */
+  --color-text-neutral-primary: var(--color-slate-900);
+  --color-text-inverse-tertiary: var(--color-gray-300);
+  --color-text-primary: var(--color-gray-900);
+  --color-text-inverse-secondary: var(--color-gray-200);
+  --color-text-danger-primary: var(--color-red-700);
+  --color-text-inverse-primary: var(--color-white);
+  --color-text-neutral-tertiary: var(--color-slate-400);
+  --color-text-brand-tertiary: var(--color-brand-300);
+  --color-text-danger-tertiary: var(--color-red-500);
+  --color-text-brand-primary: var(--color-brand-600);
+  --color-text-warning-tertiary: var(--color-amber-600);
+  --color-text-positive-tertiary: var(--color-green-500);
+  --color-text-positive-secondary: var(--color-green-600);
+  --color-text-neutral-secondary: var(--color-slate-600);
+  --color-text-secondary: var(--color-gray-500);
+  --color-text-positive-primary: var(--color-green-800);
+  --color-text-tertiary: var(--color-gray-400);
+  --color-text-brand-secondary: var(--color-brand-400);
+  --color-text-warning-secondary: var(--color-amber-700);
+  --color-text-warning-primary: var(--color-amber-900);
+  --color-text-danger-secondary: var(--color-red-600);
+
+  /* Warning */
+  --color-warning-tertiary-hover: var(--color-amber-100);
+  --color-warning-tertiary: var(--color-amber-50);
+  --color-warning-hover: var(--color-amber-600);
+  --color-warning: var(--color-amber-500);
+  --color-warning-secondary-hover: var(--color-amber-300);
+  --color-warning-secondary: var(--color-amber-200);
+}
+
+.dark {
+  /* Semantic Colors - Dark Theme */
+  /* Background */
+  --color-background-tertiary: var(--color-gray-600);
+  --color-background-secondary: var(--color-gray-800);
+  --color-background: var(--color-gray-900);
+  --color-background-secondary-hover: var(--color-gray-900);
+  --color-background-hover: var(--color-gray-800);
+  --color-background-tertiary-hover: var(--color-gray-700);
+
+  /* Border */
+  --color-border-secondary: var(--color-slate-500);
+  --color-border: var(--color-slate-700);
+  --color-border-tertiary: var(--color-slate-400);
+
+  /* Brand */
+  --color-brand-tertiary: var(--color-brand-800);
+  --color-brand-secondary-hover: var(--color-brand-800);
+  --color-brand-tertiary-hover: var(--color-brand-900);
+  --color-brand: var(--color-brand-400);
+  --color-brand-secondary: var(--color-brand-700);
+  --color-brand-hover: var(--color-brand-500);
+
+  /* Danger */
+  --color-danger-tertiary-hover: var(--color-red-950);
+  --color-danger-secondary-hover: var(--color-red-900);
+  --color-danger-secondary: var(--color-red-800);
+  --color-danger: var(--color-red-600);
+  --color-danger-hover: var(--color-red-700);
+  --color-danger-tertiary: var(--color-red-900);
+
+  /* Neutral */
+  --color-neutral-tertiary-hover: var(--color-slate-950);
+  --color-neutral-secondary-hover: var(--color-slate-800);
+  --color-neutral-hover: var(--color-slate-500);
+  --color-neutral: var(--color-slate-400);
+  --color-neutral-secondary: var(--color-slate-700);
+  --color-neutral-tertiary: var(--color-slate-900);
+
+  /* Positive */
+  --color-positive-tertiary-hover: var(--color-green-950);
+  --color-positive-tertiary: var(--color-green-900);
+  --color-positive-secondary-hover: var(--color-green-900);
+  --color-positive-secondary: var(--color-green-800);
+  --color-positive-hover: var(--color-green-800);
+  --color-positive: var(--color-green-700);
+
+  /* Text */
+  --color-text-neutral-primary: var(--color-slate-200);
+  --color-text-inverse-tertiary: var(--color-gray-400);
+  --color-text-primary: var(--color-white);
+  --color-text-inverse-secondary: var(--color-gray-500);
+  --color-text-danger-primary: var(--color-red-200);
+  --color-text-inverse-primary: var(--color-gray-900);
+  --color-text-neutral-tertiary: var(--color-slate-400);
+  --color-text-brand-tertiary: var(--color-brand-400);
+  --color-text-danger-tertiary: var(--color-red-500);
+  --color-text-brand-primary: var(--color-brand-100);
+  --color-text-warning-tertiary: var(--color-amber-600);
+  --color-text-positive-tertiary: var(--color-green-600);
+  --color-text-positive-secondary: var(--color-green-400);
+  --color-text-neutral-secondary: var(--color-slate-300);
+  --color-text-secondary: var(--color-gray-200);
+  --color-text-positive-primary: var(--color-green-200);
+  --color-text-tertiary: var(--color-gray-300);
+  --color-text-brand-secondary: var(--color-brand-300);
+  --color-text-warning-secondary: var(--color-amber-400);
+  --color-text-warning-primary: var(--color-amber-200);
+  --color-text-danger-secondary: var(--color-red-400);
+
+  /* Warning */
+  --color-warning-tertiary-hover: var(--color-amber-950);
+  --color-warning-tertiary: var(--color-amber-900);
+  --color-warning-hover: var(--color-amber-500);
+  --color-warning: var(--color-amber-400);
+  --color-warning-secondary-hover: var(--color-amber-900);
+  --color-warning-secondary: var(--color-amber-700);
+}
+
+@layer utilities {
+  .font-display {
+    @apply font-heading text-5xl font-medium leading-tight tracking-tight;
+  }
+
+  .font-title-large {
+    @apply font-heading text-4xl font-bold leading-tight tracking-normal;
+  }
+
+  .font-title {
+    @apply font-heading text-3xl font-medium leading-9 tracking-tight;
+  }
+
+  .font-title-small {
+    @apply font-heading text-xl font-medium leading-6;
+  }
+
+  .font-subtitle-large {
+    @apply font-heading text-lg font-semibold leading-5;
+  }
+
+  .font-subtitle {
+    @apply font-heading text-base font-semibold leading-5;
+  }
+
+  .font-subtitle-small {
+    @apply font-heading text-sm font-semibold leading-4;
+  }
+
+  .font-body-large {
+    @apply font-sans text-lg font-normal leading-6;
+  }
+
+  .font-body-regular {
+    @apply font-sans text-base font-normal leading-6;
+  }
+
+  .font-body-small {
+    @apply font-sans text-sm font-normal leading-5;
+  }
+
+  .font-input {
+    @apply font-sans text-sm font-normal leading-5;
+  }
+
+  .font-label {
+    @apply font-sans text-sm font-normal leading-3;
+  }
+
+  .font-label-bold {
+    @apply font-sans text-sm font-medium leading-3;
+  }
+
+  .font-caption {
+    @apply font-sans text-xs font-normal leading-3;
+  }
+
+  .font-code {
+    @apply font-mono text-base font-normal leading-5;
+  }
+
+  .font-button {
+    @apply font-heading text-sm font-medium leading-4;
+  }
+
+  .font-button-small {
+    @apply font-heading text-xs font-medium leading-3;
+  }
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));

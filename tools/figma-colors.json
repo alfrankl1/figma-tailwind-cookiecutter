@@ -1,11 +1,17 @@
-// Example Figma Colors JSON structure:
-// {
-//   "custom-primitive-classes": {
-//     "color-brand-800": { "default": "#3725ae" },
-//     ...
-//   },
-//   "semantic-classes": {
-//     "text-neutral-primary": { "light": "#0f172b", "dark": "#e2e8f0" },
-//     ...
-//   }
-// }
+/* figma-colors.js - Export your colors from Figma */
+
+/* 
+ * Instructions:
+ * 
+ * 1. Use the "Figma Variables to JSON" plugin from the Figma community:
+ *    https://www.figma.com/community/plugin/1345399750040406570/figma-variables-to-json
+ * 
+ * 2. In Figma, run the plugin with these settings:
+ *    ✅ Group by: "Variant"
+ *    ✅ Naming convention: "kebab-case"
+ *    ✅ Collection: "custom" (toggle off "Tailwind CSS Classes")
+ * 
+ * 3. Click Copy and paste into https://jsonformatter.curiousconcept.com/ to format the JSON
+ *
+ * 4. Copy the formatted JSON and paste here
+ */
