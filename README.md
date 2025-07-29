@@ -1,27 +1,27 @@
 # Figma-Tailwind Design System CookieCutter
+> **A Tailwind project that actually aligns to your design system**
+>
 ![Figma Text Styles to TailwindCSS](docs/images/cover.png)
 
-> **A Tailwind project that actually aligns to your design system**
-
 Whether you're vibe-coding, prototyping, building production apps or setting up design systems - this cookiecutter creates true alignment between your Figma designs and codebase without comprimise for development or design standard.
-
+<br><br>
 ## 🎪 Who This Is For
-**Designers & Product People** Create prototypes that actually look liek your designs
-**Development Teams** Expedite the set up to align to your design system -> build faster
-**Design Systems Teams** - Single source of truth, automated consistency across design and code
-
+- **Designers & Product People** Create prototypes that actually look like your designs
+- **Development Teams** Expedite the set up to align to your design system -> build faster
+- **Design and Frontend Ops** - Single source of truth, automated consistency across design and code
+<br><br>
 ## 🚀 5-Minute Setup
-**1. Get the Figma Community File** - [📁 Download Figma Community File](https://www.figma.com/community/file/1526688065982358612)
-**2. Customise Your Tokens** - Modify colors and fonts in Figma
-**3. Sync to Code** - Export your tokens and run the sync scripts to generate Tailwind variables and classes
-
+1. **Get the Figma Community File** - [📁 Download Figma Community File](https://www.figma.com/community/file/1526688065982358612)
+2. **Customise Your Tokens** - Modify colors and fonts in Figma
+3. **Sync to Code** - Export your tokens and run the sync scripts to generate Tailwind variables and classes
+<br><br>
 ## 🙌 Clone & Install
 ```bash
 git clone https://github.com/alfrankl1/figma-tailwind-cookiecutter.git
 cd figma-tailwind-cookiecutter
 npm install
 ```
-
+<br><br>
 ## ✨ Key Features
 
 - 🎨 **True Figma-Code Alignment** - Design tokens sync automatically
@@ -31,7 +31,7 @@ npm install
 - 🎯 **MCP-Ready** - Optimized for AI vibe-coding workflows
 - 📐 **Pixel-Perfect Typography** - Font styles match Figma exactly
 
-
+<br><br>
 ## 🎯 Design Philosophy
 
 ### Semantic Colors
@@ -54,7 +54,7 @@ bg-brand text-brand-secondary border-brand-tertiary
 
 - **Next.js 15.3.5** + **TypeScript**
 - **Tailwind CSS 4.1** with native CSS variables
-- **shadcn/ui** components (customized)
+- **shadcn/ui** components (customised)
 - **Phosphor Icons** (Figma-aligned)
 
 ## 🤝 Contributing
