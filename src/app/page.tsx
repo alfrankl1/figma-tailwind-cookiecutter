@@ -2,13 +2,16 @@
 
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
-import { Palette, Heart, Download, Plus, ArrowRight, Sun, Moon, Trash, Lock, MagnifyingGlass } from "phosphor-react"
-import { Input } from "@/components/ui/input"
-import { InputCompact } from "@/components/ui/inputCompact"
+import { Plus, Minus, ArrowCounterClockwise, Sun, Moon } from "phosphor-react"
+import { HedgehogCounter } from "@/components/hedgehog-counter"
+import { HedgehogStats } from "@/components/hedgehog-stats"
 
 export default function Home() {
   const [isDark, setIsDark] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [hedgehogCount, setHedgehogCount] = useState(0)
+  const [totalCounted, setTotalCounted] = useState(0)
+  const [sessions, setSessions] = useState(0)
 
   // Set mounted to true after component mounts on client
   useEffect(() => {
@@ -26,7 +29,24 @@ export default function Home() {
       setIsDark(true)
       document.documentElement.classList.add('dark')
     }
+
+    // Load saved data
+    const savedCount = localStorage.getItem('hedgehogCount')
+    const savedTotal = localStorage.getItem('totalCounted')
+    const savedSessions = localStorage.getItem('sessions')
+    
+    if (savedCount) setHedgehogCount(parseInt(savedCount))
+    if (savedTotal) setTotalCounted(parseInt(savedTotal))
+    if (savedSessions) setSessions(parseInt(savedSessions))
   }, [mounted])
+
+  // Save data whenever it changes
+  useEffect(() => {
+    if (!mounted) return
+    localStorage.setItem('hedgehogCount', hedgehogCount.toString())
+    localStorage.setItem('totalCounted', totalCounted.toString())
+    localStorage.setItem('sessions', sessions.toString())
+  }, [hedgehogCount, totalCounted, sessions, mounted])
 
   const toggleTheme = () => {
     const newTheme = !isDark
@@ -41,149 +61,111 @@ export default function Home() {
     }
   }
 
+  const incrementCount = () => {
+    setHedgehogCount(prev => prev + 1)
+    setTotalCounted(prev => prev + 1)
+  }
+
+  const decrementCount = () => {
+    if (hedgehogCount > 0) {
+      setHedgehogCount(prev => prev - 1)
+    }
+  }
+
+  const resetCount = () => {
+    if (hedgehogCount > 0) {
+      setSessions(prev => prev + 1)
+    }
+    setHedgehogCount(0)
+  }
+
   return (
-    <div className="min-h-screen p-8 pb-20 font-body-regular">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-background font-body-regular">
+      <div className="max-w-2xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="font-title text-text-primary mb-2">
-              Component Showcase
+              🦔 Hedgehog Counter
             </h1>
             <p className="font-body-regular text-text-secondary">
-              Components, built on shadcn/ui then customized
+              Keep track of all the hedgehogs you spot!
             </p>
           </div>
           
           <Button
             variant="outline"
-            size="sm"
+            size="icon-default"
             onClick={toggleTheme}
             aria-label="Toggle theme"
           >
-            {mounted ? (isDark ? <Sun /> : <Moon />) : <div className="w-4 h-4" />}
+            {mounted ? (isDark ? <Sun weight="fill" /> : <Moon weight="fill" />) : <div className="w-4 h-4" />}
           </Button>
         </div>
 
-        {/* All Variants */}
-        <section className="mb-12">
-          <h2 className="font-subtitle text-text-primary mb-6">All Variants</h2>
-          <div className="flex flex-wrap gap-4">
-            <Button variant="default">Default</Button>
-            <Button variant="destructive">Destructive</Button>
-            <Button variant="outline">Outline</Button>
-            <Button variant="secondary">Secondary</Button>
-            <Button variant="ghost">Ghost</Button>
-            <Button variant="link">Link</Button>
+        {/* Main Counter */}
+        <div className="mb-8">
+          <HedgehogCounter 
+            count={hedgehogCount}
+            onIncrement={incrementCount}
+            onDecrement={decrementCount}
+            onReset={resetCount}
+          />
+        </div>
+
+        {/* Stats */}
+        <HedgehogStats 
+          currentCount={hedgehogCount}
+          totalCounted={totalCounted}
+          sessions={sessions}
+        />
+
+        {/* Action Buttons */}
+        <div className="flex flex-wrap gap-4 justify-center mt-8">
+          <Button 
+            size="lg"
+            onClick={incrementCount}
+            className="flex-1 min-w-[140px]"
+          >
+            <Plus weight="bold" />
+            Spotted One!
+          </Button>
+          
+          <Button 
+            variant="outline"
+            size="lg"
+            onClick={decrementCount}
+            disabled={hedgehogCount === 0}
+            className="flex-1 min-w-[140px]"
+          >
+            <Minus weight="bold" />
+            Oops, Miscount
+          </Button>
+        </div>
+
+        <div className="flex justify-center mt-4">
+          <Button 
+            variant="secondary"
+            size="default"
+            onClick={resetCount}
+            disabled={hedgehogCount === 0}
+          >
+            <ArrowCounterClockwise weight="bold" />
+            New Session
+          </Button>
+        </div>
+
+        {/* Fun Facts */}
+        <div className="mt-12 p-6 bg-background-secondary rounded-lg border border-border">
+          <h3 className="font-subtitle text-text-primary mb-4">🦔 Hedgehog Facts</h3>
+          <div className="space-y-3 font-body-small text-text-secondary">
+            <p>• Hedgehogs have around 5,000 to 7,000 spines on their backs</p>
+            <p>• They can run up to 4.5 mph when they need to</p>
+            <p>• Baby hedgehogs are called hoglets</p>
+            <p>• They hibernate during winter months</p>
+            <p>• Hedgehogs are excellent swimmers!</p>
           </div>
-        </section>
-
-        {/* All Sizes */}
-        <section className="mb-12">
-          <h2 className="font-subtitle text-text-primary mb-6">All Sizes</h2>
-          <div className="flex flex-wrap items-center gap-4">
-            <Button size="sm">Small</Button>
-            <Button size="default">Default</Button>
-            <Button size="lg">Large</Button>
-          </div>
-        </section>
-
-        {/* Icons with Text */}
-        <section className="mb-12">
-          <h2 className="font-subtitle text-text-primary mb-6">Icons with Text</h2>
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-4">
-              <Button><Heart />Save</Button>
-              <Button><Download />Download</Button>
-              <Button>Add Item<Plus /></Button>
-              <Button>Continue<ArrowRight /></Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Icon Only Buttons */}
-        <section className="mb-12">
-          <h2 className="font-subtitle text-text-primary mb-6">Icon Only Buttons</h2>
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-subtitle-small text-text-secondary mb-3">Icon Sizes</h3>
-              <div className="flex flex-wrap items-center gap-4">
-                <Button size="icon-sm"><Palette weight="fill" /></Button>
-                <Button size="icon-default"><Heart weight="fill" /></Button>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-subtitle-small text-text-secondary mb-3">Different Variants as Icon Buttons</h3>
-              <div className="flex flex-wrap items-center gap-4">
-                <Button variant="ghost" size="icon-default"><Palette weight="fill" /></Button>
-                <Button variant="outline" size="icon-default"><Heart weight="fill" /></Button>
-                <Button variant="secondary" size="icon-default"><Download weight="fill" /></Button>
-                <Button variant="default" size="icon-default"><Plus weight="fill" /></Button>
-                <Button variant="destructive" size="icon-default"><Trash weight="fill" /></Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-
-        {/* Interactive Examples */}
-        <section className="mb-12">
-          <h2 className="font-subtitle text-text-primary mb-6">Interactive Examples</h2>
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-4">
-              <Button onClick={() => alert('Clicked!')}>
-                <Palette />
-                Click Me
-              </Button>
-              <Button variant="outline" disabled>
-                <Download />
-                Disabled
-              </Button>
-              <Button variant="destructive">
-                Delete
-                <Trash />
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Input Examples */}
-        <section className="mb-12">
-          <h2 className="font-subtitle text-text-primary mb-6">Input Examples</h2>
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-4">
-            <Input label="Email" placeholder="Enter your email" />
-
-            <Input variant="file" label="Upload file" />
-
-            <Input 
-              placeholder="Password"
-              icon={Lock}
-              type="password"
-              error={true} 
-              description="Password is required" 
-            />
-            </div>
-          </div>
-        </section>
-
-        {/* Compact Input Examples */}
-        <section className="mb-12">
-          <h2 className="font-subtitle text-text-primary mb-6">Compact Input Examples</h2>
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-4">
-              {/* Default */}
-              <InputCompact placeholder="Search..." />
-              {/* With icon explicitly set */}
-              <InputCompact placeholder="Search with icon" icon={MagnifyingGlass} />
-              {/* Error state */}
-              <InputCompact placeholder="Error state" error={true} />
-              {/* Filled state (simulate by passing defaultValue and state) */}
-              <InputCompact defaultValue="Filled value" state="filled" />
-            </div>
-          </div>
-        </section>
-
+        </div>
       </div>
     </div>
   )
