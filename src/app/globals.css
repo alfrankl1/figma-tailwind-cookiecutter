@@ -24,9 +24,307 @@
   --font-mono: "Space Mono", monospace; /* Change to your imported font-family */
   --font-heading: "Cabin", sans-serif; /* Change to your imported font-family or change to var(--font-sans) if only using one font-family */
 
+  /* Essential Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  
+  /* Gray Scale */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Slate Scale */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  /* Brand Colors */
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+
+  /* Red Scale */
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+
+  /* Green Scale */
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+
+  /* Amber Scale */
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+
+  /* Semantic Colors - Light Theme */
+  /* Background */
+  --color-background: var(--color-white);
+  --color-background-secondary: var(--color-gray-100);
+  --color-background-tertiary: var(--color-gray-300);
+  --color-background-hover: var(--color-gray-100);
+  --color-background-secondary-hover: var(--color-gray-200);
+  --color-background-tertiary-hover: var(--color-gray-400);
+
+  /* Border */
+  --color-border: var(--color-slate-200);
+  --color-border-secondary: var(--color-slate-300);
+  --color-border-tertiary: var(--color-slate-500);
+
+  /* Brand */
+  --color-brand: var(--color-brand-600);
+  --color-brand-secondary: var(--color-brand-200);
+  --color-brand-tertiary: var(--color-brand-50);
+  --color-brand-hover: var(--color-brand-700);
+  --color-brand-secondary-hover: var(--color-brand-300);
+  --color-brand-tertiary-hover: var(--color-brand-100);
+
+  /* Danger */
+  --color-danger: var(--color-red-500);
+  --color-danger-secondary: var(--color-red-200);
+  --color-danger-tertiary: var(--color-red-50);
+  --color-danger-hover: var(--color-red-600);
+  --color-danger-secondary-hover: var(--color-red-300);
+  --color-danger-tertiary-hover: var(--color-red-100);
+
+  /* Neutral */
+  --color-neutral: var(--color-slate-700);
+  --color-neutral-secondary: var(--color-slate-300);
+  --color-neutral-tertiary: var(--color-slate-50);
+  --color-neutral-hover: var(--color-slate-800);
+  --color-neutral-secondary-hover: var(--color-slate-400);
+  --color-neutral-tertiary-hover: var(--color-slate-200);
+
+  /* Positive */
+  --color-positive: var(--color-green-500);
+  --color-positive-secondary: var(--color-green-200);
+  --color-positive-tertiary: var(--color-green-50);
+  --color-positive-hover: var(--color-green-600);
+  --color-positive-secondary-hover: var(--color-green-300);
+  --color-positive-tertiary-hover: var(--color-green-100);
+
+  /* Text */
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-500);
+  --color-text-tertiary: var(--color-gray-400);
+  --color-text-inverse-primary: var(--color-white);
+  --color-text-inverse-secondary: var(--color-gray-200);
+  --color-text-inverse-tertiary: var(--color-gray-300);
+  --color-text-neutral-primary: var(--color-slate-900);
+  --color-text-neutral-secondary: var(--color-slate-600);
+  --color-text-neutral-tertiary: var(--color-slate-400);
+  --color-text-brand-primary: var(--color-brand-600);
+  --color-text-brand-secondary: var(--color-brand-400);
+  --color-text-brand-tertiary: var(--color-brand-300);
+  --color-text-danger-primary: var(--color-red-700);
+  --color-text-danger-secondary: var(--color-red-600);
+  --color-text-danger-tertiary: var(--color-red-500);
+  --color-text-positive-primary: var(--color-green-800);
+  --color-text-positive-secondary: var(--color-green-600);
+  --color-text-positive-tertiary: var(--color-green-500);
+  --color-text-warning-primary: var(--color-amber-900);
+  --color-text-warning-secondary: var(--color-amber-700);
+  --color-text-warning-tertiary: var(--color-amber-600);
+
+  /* Warning */
+  --color-warning: var(--color-amber-500);
+  --color-warning-secondary: var(--color-amber-200);
+  --color-warning-tertiary: var(--color-amber-50);
+  --color-warning-hover: var(--color-amber-600);
+  --color-warning-secondary-hover: var(--color-amber-300);
+  --color-warning-tertiary-hover: var(--color-amber-100);
+}
+
+.dark {
+  /* Semantic Colors - Dark Theme */
+  /* Background */
+  --color-background: var(--color-gray-900);
+  --color-background-secondary: var(--color-gray-800);
+  --color-background-tertiary: var(--color-gray-600);
+  --color-background-hover: var(--color-gray-800);
+  --color-background-secondary-hover: var(--color-gray-900);
+  --color-background-tertiary-hover: var(--color-gray-700);
+
+  /* Border */
+  --color-border: var(--color-slate-700);
+  --color-border-secondary: var(--color-slate-500);
+  --color-border-tertiary: var(--color-slate-400);
+
+  /* Brand */
+  --color-brand: var(--color-brand-400);
+  --color-brand-secondary: var(--color-brand-700);
+  --color-brand-tertiary: var(--color-brand-800);
+  --color-brand-hover: var(--color-brand-500);
+  --color-brand-secondary-hover: var(--color-brand-800);
+  --color-brand-tertiary-hover: var(--color-brand-900);
+
+  /* Danger */
+  --color-danger: var(--color-red-600);
+  --color-danger-secondary: var(--color-red-800);
+  --color-danger-tertiary: var(--color-red-900);
+  --color-danger-hover: var(--color-red-700);
+  --color-danger-secondary-hover: var(--color-red-900);
+  --color-danger-tertiary-hover: var(--color-red-950);
+
+  /* Neutral */
+  --color-neutral: var(--color-slate-400);
+  --color-neutral-secondary: var(--color-slate-700);
+  --color-neutral-tertiary: var(--color-slate-900);
+  --color-neutral-hover: var(--color-slate-500);
+  --color-neutral-secondary-hover: var(--color-slate-800);
+  --color-neutral-tertiary-hover: var(--color-slate-950);
+
+  /* Positive */
+  --color-positive: var(--color-green-700);
+  --color-positive-secondary: var(--color-green-800);
+  --color-positive-tertiary: var(--color-green-900);
+  --color-positive-hover: var(--color-green-800);
+  --color-positive-secondary-hover: var(--color-green-900);
+  --color-positive-tertiary-hover: var(--color-green-950);
+
+  /* Text */
+  --color-text-primary: var(--color-white);
+  --color-text-secondary: var(--color-gray-200);
+  --color-text-tertiary: var(--color-gray-300);
+  --color-text-inverse-primary: var(--color-gray-900);
+  --color-text-inverse-secondary: var(--color-gray-500);
+  --color-text-inverse-tertiary: var(--color-gray-400);
+  --color-text-neutral-primary: var(--color-slate-200);
+  --color-text-neutral-secondary: var(--color-slate-300);
+  --color-text-neutral-tertiary: var(--color-slate-400);
+  --color-text-brand-primary: var(--color-brand-100);
+  --color-text-brand-secondary: var(--color-brand-300);
+  --color-text-brand-tertiary: var(--color-brand-400);
+  --color-text-danger-primary: var(--color-red-200);
+  --color-text-danger-secondary: var(--color-red-400);
+  --color-text-danger-tertiary: var(--color-red-500);
+  --color-text-positive-primary: var(--color-green-200);
+  --color-text-positive-secondary: var(--color-green-400);
+  --color-text-positive-tertiary: var(--color-green-600);
+  --color-text-warning-primary: var(--color-amber-200);
+  --color-text-warning-secondary: var(--color-amber-400);
+  --color-text-warning-tertiary: var(--color-amber-600);
+
+  /* Warning */
+  --color-warning: var(--color-amber-400);
+  --color-warning-secondary: var(--color-amber-700);
+  --color-warning-tertiary: var(--color-amber-900);
+  --color-warning-hover: var(--color-amber-500);
+  --color-warning-secondary-hover: var(--color-amber-900);
+  --color-warning-tertiary-hover: var(--color-amber-950);
 }
 
 @layer utilities {
+  .font-display {
+    @apply font-heading text-5xl font-medium leading-tight tracking-tight;
+  }
+
+  .font-title-large {
+    @apply font-heading text-4xl font-bold leading-tight tracking-normal;
+  }
+
+  .font-title {
+    @apply font-heading text-3xl font-medium leading-9 tracking-tight;
+  }
+
+  .font-title-small {
+    @apply font-heading text-xl font-medium leading-6;
+  }
+
+  .font-subtitle-large {
+    @apply font-heading text-lg font-semibold leading-5;
+  }
+
+  .font-subtitle {
+    @apply font-heading text-base font-semibold leading-5;
+  }
+
+  .font-subtitle-small {
+    @apply font-heading text-sm font-semibold leading-4;
+  }
+
+  .font-body-large {
+    @apply font-sans text-lg font-normal leading-6;
+  }
+
+  .font-body-regular {
+    @apply font-sans text-base font-normal leading-6;
+  }
+
+  .font-body-small {
+    @apply font-sans text-sm font-normal leading-5;
+  }
+
+  .font-input {
+    @apply font-sans text-sm font-normal leading-5;
+  }
+
+  .font-label {
+    @apply font-sans text-sm font-normal leading-3;
+  }
+
+  .font-label-bold {
+    @apply font-sans text-sm font-medium leading-3;
+  }
+
+  .font-caption {
+    @apply font-sans text-xs font-normal leading-3;
+  }
+
+  .font-code {
+    @apply font-mono text-base font-normal leading-5;
+  }
+
+  .font-button {
+    @apply font-heading text-sm font-medium leading-4;
+  }
+
+  .font-button-small {
+    @apply font-heading text-xs font-medium leading-3;
+  }
 }
 
 body {
